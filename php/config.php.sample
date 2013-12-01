@@ -1,0 +1,41 @@
+<?php
+
+define('SYSTEM_DIR', dirname(__FILE__) . '/');
+define('PUBLIC_DIR', dirname(dirname(__FILE__)) . '/public/');
+define('CORE_DIR', SYSTEM_DIR . 'core/');
+define('CONTROLLER_DIR', SYSTEM_DIR . 'controller/');
+define('TEMPLATE_DIR', SYSTEM_DIR . 'template/');
+
+ini_set('display_errors', true);
+ini_set('error_reporting', E_ALL ^ E_NOTICE);
+ini_set('include_path', ini_get('include_path') . ':' . CORE_DIR);
+
+$config = array(
+	'controller_dir' => CONTROLLER_DIR,
+	'template_dir' => TEMPLATE_DIR,
+	'public_dir' => PUBLIC_DIR,
+
+	'application_main' => 'index',
+	'application_missing' => 'missing',
+
+	'chain' => array(
+		'index' => 'index',
+		'live' => 'live',
+		'register' => 'register',
+		'logs' => 'logs',
+		'help' => 'help',
+		'missing' => 'missing',
+	),
+
+	// サイトの設定
+	'application_title' => 'NicoKako',
+	'application_url' => 'http://fuga.hoge.com/',
+
+	// データベースの設定
+	'db' => array(
+		'database' => 'nicokako',
+		'host' => 'localhost',
+		'user' => 'fuga',
+		'password' => 'piyo',
+	),
+);

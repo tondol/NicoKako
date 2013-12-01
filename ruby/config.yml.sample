@@ -1,0 +1,14 @@
+# ニコニコ動画の設定
+nv:
+  mail: fuga@hoge.com
+  password: piyo
+
+# データベースの設定
+db:
+  host: "127.0.0.1"
+  user: fuga
+  password: piyo
+  name: nicokako
+
+# ダウンロードしたファイルの保存先（絶対パス）
+contents: /home/fuga/nicokako/public/contents/

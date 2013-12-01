@@ -1,0 +1,7 @@
+.htaccess
+.htpasswd
+public/contents
+php/config.php
+ruby/config.yml
+ruby/nicokako.log
+ruby/error.log

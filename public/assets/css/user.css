@@ -1,0 +1,95 @@
+@charset "UTF-8";
+
+/*
+ * フッターを最下部に固定
+ */
+html,
+body {
+	height: 100%;
+}
+body > .container {
+	/* ヘッダーを含み、フッターを含まない箱 */
+	/* 少なくとも100%、必要に応じて伸びる */
+	height: auto !important;
+	height: 100%;
+	max-width: 100% !important;
+	/* 本来のcontainerの機能を無効化 */
+	min-height: 100% !important;
+	/* フッター分の高さを確保しつつ、箱自体の高さを縮める */
+	margin: 0 0 -60px 0;
+	padding: 0 0 60px 0;
+}
+body > .container > .container {
+	margin: 20px auto;
+}
+#footer {
+	height: 60px;
+	padding: 20px 0;
+	background-color: #f5f5f5;
+}
+#footer p {
+	margin: 0;
+}
+
+/*
+ * サムネイルの余白調整
+ */
+.col-sm-1,
+.col-sm-2,
+.col-sm-3,
+.col-sm-4,
+.col-sm-5,
+.col-sm-6,
+.col-md-1,
+.col-md-2,
+.col-md-3,
+.col-md-4,
+.col-md-5,
+.col-md-6 {
+	margin-bottom: 10px;
+}
+.thumbnail {
+	/* 箱のサイズを揃える */
+	position: relative;
+	height: 276px; /* 232px + 44px */
+	/* 4pxのpaddingを削除して上側を.captionの9pxに揃える */
+	padding: 9px 0px 0px 0px;
+	text-align: center;
+}
+.thumbnail p:last-child {
+	/* 箱の下部に配置する */
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* .captionの余白を無効化してから余白を確保する */
+	margin: 0 -9px;
+	padding: 9px;
+}
+.thumbnail p:last-child a {
+	/* 横幅を箱一杯にする */
+	width: 100%;
+}
+
+/*
+ * 要素の余白調整
+ */
+.table {
+	margin-bottom: 10px;
+}
+form {
+	margin-bottom: 10px;
+}
+.page-header {
+	margin: 20px 0;
+}
+.page-header h1,
+.page-header h2,
+.page-header h3,
+.page-header h4,
+.page-header h5,
+.page-header h6 {
+	margin: 0;
+}
+#player_wrapper {
+	margin-bottom: 10px;
+}
