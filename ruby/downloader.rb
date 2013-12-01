@@ -45,7 +45,7 @@ class NicovideoDownloader
     app = params[:url].path.reverse.chop.reverse
 
     resume = ""
-    filename = "#{params[:live_id]}.mp4"
+    filename = "#{params[:live_id]}.flv"
     filepath = "#{@config["contents"]}#{filename}"
 
     50.times {|i|
@@ -95,8 +95,8 @@ class NicovideoDownloader
           dates << $1 if line =~ /date="([0-9]+)"/
         else
           retry_count += 1
-          raise Nicovideo::UnavailableVideoError.new if retry_count >= 3
-          redo
+          raise Nicovideo::UnavailableVideoError.new if retry_count >= 5
+          sleep 1
         end
       end
     }
@@ -151,7 +151,7 @@ class NicovideoDownloader
       thread = $1 if status =~ %r|<thread>([0-9]+)</thread>|
       end_time = $1 if status =~ %r|<end_time>([0-9]+)</end_time>|
       wayback_key = get_wayback_key(thread)
- 
+
       @logs.d("downloader", "download video: #{title}")
       filename, filesize = download_video({
         :live_id => live_id,
@@ -159,7 +159,7 @@ class NicovideoDownloader
         :playpath => playpath,
         :ticket => ticket,
       })
- 
+
       @logs.d("downloader", "download comments: #{title}")
       download_comments({
         :live_id => live_id,
@@ -180,7 +180,6 @@ class NicovideoDownloader
     rescue StandardError => e
       @logs.e("downloader", "unavailable: #{title}")
       @logs.e("downloader", e.message)
-      puts e.backtrace
       @lives.update_with_failure(id)
     end
   end
@@ -196,7 +195,6 @@ class NicovideoDownloader
     rescue Exception => e
       @logs.e("downloader", "an unexpected error has occurred")
       @logs.e("downloader", e.message)
-      puts e.backtrace
     ensure
       Model::close
     end
