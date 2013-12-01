@@ -39,7 +39,7 @@ class NicovideoDownloader
 
   def download_video(params)
     tc_url = "#{params[:url].to_s}"
-    page_url = "http://live.nicovideo.jp/watch/#{params[:id]}"
+    page_url = "http://live.nicovideo.jp/watch/#{params[:live_id]}"
     swf_url = "http://live.nicovideo.jp/nicoliveplayer.swf?131118162200"
     flash_ver = %q{"WIN 11,6,602,180"}
     app = params[:url].path.reverse.chop.reverse

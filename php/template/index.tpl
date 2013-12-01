@@ -23,10 +23,10 @@
 		<div class="thumbnail">
 		<?php if (isset($live["downloadedAt"])): ?>
 			<a href="<?= h($live_url) ?>">
-				<img src="<?= h($thumbnail_url) ?>" />
+				<img src="<?= h($thumbnail_url) ?>" height="144" />
 			</a>
 		<?php else: ?>
-				<img src="<?= h($unavailable_url) ?>" />
+				<img src="<?= h($unavailable_url) ?>" height="144" />
 		<?php endif ?>
 			<div class="caption">
 				<p><?= h($live["title"]) ?></p>
