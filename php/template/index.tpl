@@ -21,18 +21,22 @@
 		?>
 	<div class="col-sm-4 col-md-3">
 		<div class="thumbnail">
-			<a href="<?= h($live_url) ?>">
 		<?php if (isset($live["downloadedAt"])): ?>
+			<a href="<?= h($live_url) ?>">
 				<img src="<?= h($thumbnail_url) ?>" />
+			</a>
 		<?php else: ?>
 				<img src="<?= h($unavailable_url) ?>" />
 		<?php endif ?>
-			</a>
 			<div class="caption">
 				<p><?= h($live["title"]) ?></p>
+		<?php if (isset($live["downloadedAt"])): ?>
 				<p><a href="<?= h($live_url) ?>" class="btn btn-primary">
 					再生する
 				</a></p>
+		<?php else: ?>
+				<p><a class="btn btn-primary disabled">未ダウンロード</a></p>
+		<?php endif ?>
 			</div><!-- /caption -->
 		</div><!-- /thumbnail -->
 	</div><!-- /col -->
