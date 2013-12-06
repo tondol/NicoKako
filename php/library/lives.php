@@ -26,7 +26,9 @@ class Model_lives {
 	}
 	function select_all() {
 		$sql = "SELECT *" .
-			" FROM `lives`";
+			" FROM `lives`" .
+			" WHERE `deletedAt` IS NULL" .
+			" ORDER BY `downloadedAt` IS NULL DESC, `downloadedAt` DESC";
 		$statement = $this->db->prepare($sql);
 		$statement->execute();
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
