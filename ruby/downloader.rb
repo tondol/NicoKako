@@ -19,7 +19,19 @@ class NicovideoDownloader
     Net::HTTP.start("ow.live.nicovideo.jp", 80) {|w|
       request = "/api/getplayerstatus?v=" + live_id
       response = w.get(request, 'Cookie' => @session)
-      return response.body
+      status = response.body
+      raise Nicovideo::UnavailableVideoError.new if status.include?("<code>closed</code>")
+
+      params = {}
+      params[:url] = $1 if status =~ %r|<url>([./0-9:A-Za-z_]+)</url>|
+      params[:playpath] = "mp4:" + $1 if status =~ %r|(/content/[0-9]{8}/[0-9A-Za-z_]+.f4v)|
+      params[:ticket] = $1 if status =~ %r|<ticket>([0-9:A-Za-z]+)</ticket>|
+      params[:user_id] = $1 if status =~ %r|<user_id>([0-9]+)</user_id>|
+      params[:address] = $1 if status =~ %r|<addr>([.0-9A-Za-z]+)</addr>|
+      params[:port] = $1 if status =~ %r|<port>([0-9]+)</port>|
+      params[:thread] = $1 if status =~ %r|<thread>([0-9]+)</thread>|
+      params[:end_time] = $1 if status =~ %r|<end_time>([0-9]+)</end_time>|
+      return params
     }
   end
   def get_wayback_key(thread)
@@ -140,35 +152,25 @@ class NicovideoDownloader
   def download(id, live_id, title)
     begin
       status = get_player_status(live_id)
- 
-      url = $1 if status =~ %r|<url>([./0-9:A-Za-z_]+)</url>|
-      playpath = "mp4:" + $1 if status =~ %r|(/content/[0-9]{8}/[0-9A-Za-z_]+.f4v)|
-      ticket = $1 if status =~ %r|<ticket>([0-9:A-Za-z]+)</ticket>|
- 
-      user_id = $1 if status =~ %r|<user_id>([0-9]+)</user_id>|
-      address = $1 if status =~ %r|<addr>([.0-9A-Za-z]+)</addr>|
-      port = $1 if status =~ %r|<port>([0-9]+)</port>|
-      thread = $1 if status =~ %r|<thread>([0-9]+)</thread>|
-      end_time = $1 if status =~ %r|<end_time>([0-9]+)</end_time>|
-      wayback_key = get_wayback_key(thread)
+      wayback_key = get_wayback_key(status[:thread])
 
       @logs.d("downloader", "download video: #{title}")
       filename, filesize = download_video({
         :live_id => live_id,
-        :url => URI.parse(url),
-        :playpath => playpath,
-        :ticket => ticket,
+        :url => URI.parse(status[:url]),
+        :playpath => status[:playpath],
+        :ticket => status[:ticket],
       })
 
       @logs.d("downloader", "download comments: #{title}")
       download_comments({
         :live_id => live_id,
-        :address => address,
-        :port => port,
-        :thread => thread,
-        :when => end_time,
+        :address => status[:address],
+        :port => status[:port],
+        :thread => status[:thread],
+        :when => status[:end_time],
         :wayback_key => wayback_key,
-        :user_id => user_id,
+        :user_id => status[:user_id],
       })
  
       @logs.d("downloader", "download thumbnail: #{title}")

@@ -16,7 +16,7 @@
 <form action="<?= h($this->get_url()) ?>" method="post" role="form">
 	<div class="<?= h($group_class) ?>">
 		<label for="url">URL</label>
-		<input name="url" type="text" value="<?= h($this->post["url"]) ?>" class="form-control" id="url" placeholder="http://live.nicovideo.jp/gate/lvxxxx" />
+		<input name="url" type="text" value="<?= h($this->post["url"]) ?>" class="form-control" id="url" placeholder="http://live.nicovideo.jp/watch/lvxxxx" />
 <?php if (!$is_valid): ?>
 		<p class="help-block">
 			<?= nl2br_h(implode("\n", $validation_error)) ?>

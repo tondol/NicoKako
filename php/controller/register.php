@@ -14,6 +14,11 @@ class Controller_register extends Controller {
 		if (preg_match($pattern, $this->post["url"], $matches)) {
 			$this->live_id = $matches[1];
 		}
+
+		$pattern = "!http://live\.nicovideo\.jp/watch/([0-9A-Za-z]+)!";
+		if (preg_match($pattern, $this->post["url"], $matches)) {
+			$this->live_id = $matches[1];
+		}
 	}
 	function get_live_title() {
 		$url = "http://live.nicovideo.jp/gate/" . $this->live_id;
