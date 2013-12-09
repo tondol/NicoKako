@@ -1,0 +1,3 @@
+[submodule "ruby/NicoVideo"]
+	path = ruby/NicoVideo
+	url = https://github.com/tondol/Nicovideo.git
