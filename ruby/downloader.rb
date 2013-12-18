@@ -108,7 +108,6 @@ class NicovideoDownloader
         else
           retry_count += 1
           raise Nicovideo::UnavailableVideoError.new if retry_count >= 5
-          sleep 1
         end
       end
     }
@@ -125,6 +124,7 @@ class NicovideoDownloader
       break if dates.empty?
       comments = lines + comments
       params[:when] = dates.first
+      sleep 1
     end
 
     filename = "#{params[:live_id]}.xml"
@@ -172,10 +172,10 @@ class NicovideoDownloader
         :wayback_key => wayback_key,
         :user_id => status[:user_id],
       })
- 
+
       @logs.d("downloader", "download thumbnail: #{title}")
       download_thumbnail(live_id)
- 
+
       @logs.d("downloader", "modified: #{title}")
       @lives.update_with_success(filename, filesize, id)
       sleep 30

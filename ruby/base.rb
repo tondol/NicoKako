@@ -60,14 +60,14 @@ module Model
       @db = Model::db
     end
     def d(name, message)
-      puts "Logs.d | #{name} | #{message}"
+      $stderr.puts("Logs.d | #{name} | #{message}")
       statement = @db.prepare("INSERT INTO `logs`" +
         " (`kind`, `name`, `message`, `createdAt`)" +
         " VALUES (?, ?, ?, ?)")
       statement.execute("d", name, message, Time.now)
     end
     def e(name, message)
-      puts "Logs.e | #{name} | #{message}"
+      $stderr.puts("Logs.e | #{name} | #{message}")
       statement = @db.prepare("INSERT INTO `logs`" +
         " (`kind`, `name`, `message`, `createdAt`)" +
         " VALUES (?, ?, ?, ?)")
