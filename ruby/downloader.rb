@@ -182,6 +182,7 @@ class NicovideoDownloader
     rescue StandardError => e
       @logs.e("downloader", "unavailable: #{title}")
       @logs.e("downloader", e.message)
+      $stderr.puts(e.backtrace)
       @lives.update_with_failure(id)
     end
   end
@@ -197,6 +198,7 @@ class NicovideoDownloader
     rescue Exception => e
       @logs.e("downloader", "an unexpected error has occurred")
       @logs.e("downloader", e.message)
+      $stderr.puts(e.backtrace)
     ensure
       Model::close
     end
