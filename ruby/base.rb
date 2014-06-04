@@ -37,6 +37,11 @@ module Model
         " ORDER BY `createdAt` ASC")
       statement.execute
     end
+    def select_with_id(id)
+      statement = @db.prepare("SELECT * FROM `lives`" +
+        " WHERE `id` = ?")
+      statement.execute(id)
+    end
     def update_with_success(filename, filesize, id)
       statement = @db.prepare("UPDATE `lives`" +
         " SET `filename` = ?, `filesize` = ?, `downloadedAt` = ?" +
@@ -52,6 +57,11 @@ module Model
         " SET `deletedAt` = ?" +
         " WHERE `id` = ? AND `retryCount` >= 3")
       statement.execute(Time.now, id)
+    end
+    def delete(id)
+      statement = @db.prepare("DELETE FROM `lives`" +
+        " WHERE `id` = ?")
+      statement.execute(id)
     end
   end
 
