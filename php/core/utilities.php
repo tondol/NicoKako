@@ -1,12 +1,31 @@
 <?php
 
-function array_at() {
+function array_at()
+{
 	$numargs = func_num_args();
 	$args = func_get_args();
 	$arr = array_shift($args);
-	foreach ($args as $arg) {
-		$index = array_shift($args);
-		$arr = $arr[$index];
+	foreach ($args as $index) {
+		if (is_array($arr)) {
+			$arr = isset($arr[$index]) ? $arr[$index] : null;
+		} else if (is_object($arr)) {
+			$arr = isset($arr->{$index}) ? $arr->{$index} : null;
+		}
+	}
+	return $arr;
+}
+function array_at_default()
+{
+	$numargs = func_num_args();
+	$args = func_get_args();
+	$arr = array_shift($args);
+	$default = array_pop($args);
+	foreach ($args as $index) {
+		if (is_array($arr)) {
+			$arr = isset($arr[$index]) ? $arr[$index] : $default;
+		} else if (is_object($arr)) {
+			$arr = isset($arr->{$index}) ? $arr->{$index} : $default;
+		}
 	}
 	return $arr;
 }

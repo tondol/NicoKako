@@ -107,7 +107,8 @@ class NicovideoDownloader
           dates << $1 if line =~ /date="([0-9]+)"/
         else
           retry_count += 1
-          raise Nicovideo::UnavailableVideoError.new if retry_count >= 5
+          # 失敗したら諦める
+          break if retry_count >= 5
         end
       end
     }
