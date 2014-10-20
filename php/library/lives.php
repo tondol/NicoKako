@@ -28,7 +28,7 @@ class Model_lives {
 		$sql = "SELECT *" .
 			" FROM `lives`" .
 			" WHERE `deletedAt` IS NULL" .
-			" ORDER BY `downloadedAt` IS NULL DESC, `downloadedAt` DESC";
+			" ORDER BY `createdAt` DESC";
 		$statement = $this->db->prepare($sql);
 		$statement->execute();
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -47,22 +47,6 @@ class Model_lives {
 	function count() {
 		$sql = "SELECT COUNT(*) AS `count`" .
 			" FROM `lives`";
-		$statement = $this->db->prepare($sql);
-		$statement->execute();
-		return $statement->fetchColumn();
-	}
-	function count_not_downloaded() {
-		$sql = "SELECT COUNT(*) AS `count`" .
-			" FROM `lives`" .
-			" WHERE `downloadedAt` IS NULL";
-		$statement = $this->db->prepare($sql);
-		$statement->execute();
-		return $statement->fetchColumn();
-	}
-	function sum_filesize() {
-		$sql = "SELECT SUM(`filesize`) AS `sum`" .
-			" FROM `lives`" .
-			" WHERE `downloadedAt` IS NOT NULL";
 		$statement = $this->db->prepare($sql);
 		$statement->execute();
 		return $statement->fetchColumn();

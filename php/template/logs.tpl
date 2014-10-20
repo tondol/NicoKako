@@ -11,8 +11,8 @@
 <dl>
 	<dt>番組数</dt>
 	<dd><?= h($this->get("count_lives")) ?>個</dd>
-	<dt>処理待機中の番組数</dt>
-	<dd><?= h($this->get("count_not_downloaded_lives")) ?>個</dd>
+	<dt>ダウンロードした動画数</dt>
+	<dd><?= h($this->get("count_videos")) ?>個</dd>
 	<dt>合計ファイルサイズ（目安）</dt>
 	<dd><?= sprintf("%.2f", $this->get("sum_filesize") / 1000000.0) ?> MB</dd>
 </dl>

@@ -56,6 +56,12 @@ body > .container > .container {
 	padding: 9px 0px 0px 0px;
 	text-align: center;
 }
+.thumbnail p:first-child {
+	/* はみ出し分を非表示にする */
+	line-height: 1.5em;
+	height: 4.5em;
+	overflow: hidden;
+}
 .thumbnail p:last-child {
 	/* 箱の下部に配置する */
 	position: absolute;

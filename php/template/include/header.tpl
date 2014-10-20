@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="<?= h($this->get_public("assets/css/user.css")) ?>" />
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript" src="<?= h($this->get_public("assets/js/bootstrap.min.js")) ?>"></script>
-<?php if ($this->chain == "live"): ?>
+<?php if ($this->chain == "live/video"): ?>
 	<script src="http://jwpsrv.com/library/Jr71WDfEEeO6GhIxOQfUww.js"></script>
 <?php endif ?>
 	<title><?= $this->get_title() ?></title>

@@ -3,28 +3,41 @@
 
 <?php
 	$live = $this->get("live");
-	$video_url = $this->config["application_url"] . "contents/" . $live["filename"];
-	$thumb_url = $this->config["application_url"] . "contents/" . $live["nicoLiveId"] . ".jpg";
-	$comments_url = $this->config["application_url"] . "contents/" . $live["nicoLiveId"] . ".xml";
-	$filesize = sprintf("%.2f", $live["filesize"] / 1000000.0);
 ?>
 
 <div class="page-header">
 	<h1><?= h($this->get_title()) ?></h1>
 </div>
 <div class="page-header">
-	<h2>player <small>再生</small></h2>
+	<h2>videos <small>動画一覧</small></h2>
 </div>
 
-<div id="player"></div> 
-<script type="text/javascript">
-	jwplayer("player").setup({
-		file: "<?= h($video_url) ?>",
-		image: "<?= h($thumb_url) ?>",
-		width: 640,
-		height: 360
-	});
-</script>
+<?php if (count($this->get("videos"))): ?>
+<div class="row">
+	<?php foreach ($this->get("videos") as $i => $video): ?>
+		<?php
+			$video_url = $this->get_url("live/video") . "?id=" . $video["id"];
+			$thumb_url = $this->get_public("contents/" . $live["nicoLiveId"] . ".jpg");
+			$filesize = sprintf("%.2f", $video["filesize"] / 1000000.0);
+		?>
+	<div class="col-sm-4 col-md-3">
+		<div class="thumbnail">
+			<a href="<?= h($video_url) ?>">
+				<img src="<?= h($thumb_url) ?>" />
+			</a>
+			<div class="caption">
+				<p><?= h($live["title"]) ?></p>
+				<p><a href="<?= h($video_url) ?>" class="btn btn-primary">
+					再生する（<?= h($filesize) ?>MB）
+				</a></p>
+			</div><!-- /caption -->
+		</div><!-- /thumbnail -->
+	</div><!-- /col -->
+	<?php endforeach ?>
+</div><!-- /row -->
+<?php else: ?>
+<p>動画がありません。</p>
+<?php endif ?>
 
 <div class="page-header">
 	<h2>summary <small>概要</small></h2>
@@ -46,12 +59,6 @@
 </dl>
 
 <p>
-	<a href="<?= h($video_url) ?>" class="btn btn-primary">
-		動画ファイルのダウンロード（<?= h($filesize) ?>MB）
-	</a>
-	<a href="<?= h($comments_url) ?>" class="btn btn-default">
-		コメントのダウンロード
-	</a>
 	<a href="http://live.nicovideo.jp/gate/<?= h($live["nicoLiveId"]) ?>" class="btn btn-default">
 		公式視聴
 	</a>

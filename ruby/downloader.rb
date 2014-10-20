@@ -3,6 +3,7 @@
 
 require 'mysql'
 require 'yaml'
+require 'nokogiri'
 
 require_relative 'NicoVideo/nico'
 require_relative 'base'
@@ -12,6 +13,7 @@ class NicovideoDownloader
     Model::connect
     @config = Model::config
     @lives = Model::Lives.new
+    @videos = Model::Videos.new
     @logs = Model::Logs.new
   end
 
@@ -22,15 +24,38 @@ class NicovideoDownloader
       status = response.body
       raise Nicovideo::UnavailableVideoError.new if status.include?("<code>closed</code>")
 
+      video_id = nil
+      document = Nokogiri::XML(status)
+      quesheet = document.xpath('//stream/quesheet')
+      quesheet.xpath('que').each {|que|
+        next unless que.text.start_with?("/play")
+        streams = que.text.split[1].split(',')
+        streams.each {|stream|
+          fields = stream.split(':')
+          next if fields[0] != "premium"
+          video_id = fields[2]
+        }
+      }
+      contents = []
+      quesheet.xpath('que').each {|que|
+        next unless que.text.start_with?("/publish")
+        fields = que.text.split
+        next if fields[1] != video_id
+        contents << {
+          :vpos => que.attribute('vpos').value,
+          :playpath => fields[2],
+        }
+      }
+
       params = {}
-      params[:url] = $1 if status =~ %r|<url>([./0-9:A-Za-z_]+)</url>|
-      params[:playpath] = "mp4:" + $1 if status =~ %r|(/content/[0-9]{8}/[0-9A-Za-z_]+.f4v)|
-      params[:ticket] = $1 if status =~ %r|<ticket>([0-9:A-Za-z]+)</ticket>|
-      params[:user_id] = $1 if status =~ %r|<user_id>([0-9]+)</user_id>|
-      params[:address] = $1 if status =~ %r|<addr>([.0-9A-Za-z]+)</addr>|
-      params[:port] = $1 if status =~ %r|<port>([0-9]+)</port>|
-      params[:thread] = $1 if status =~ %r|<thread>([0-9]+)</thread>|
-      params[:end_time] = $1 if status =~ %r|<end_time>([0-9]+)</end_time>|
+      params[:url] = document.xpath('//rtmp/url').text
+      params[:ticket] = document.xpath('//rtmp/ticket').text
+      params[:user_id] = document.xpath('//user/user_id').text
+      params[:address] = document.xpath('//ms/addr').text
+      params[:port] = document.xpath('//ms/port').text
+      params[:thread] = document.xpath('//ms/thread').text
+      params[:contents] = contents
+      params[:end_time] = document.xpath('//stream/end_time').text
       return params
     }
   end
@@ -57,8 +82,8 @@ class NicovideoDownloader
     app = params[:url].path.reverse.chop.reverse
 
     resume = ""
-    filename = "#{params[:live_id]}.flv"
-    filepath = "#{@config["contents"]}#{filename}"
+    filename = params[:filename]
+    filepath = @config["contents"] + filename
 
     50.times {|i|
       system("rtmpdump" +
@@ -129,7 +154,7 @@ class NicovideoDownloader
     end
 
     filename = "#{params[:live_id]}.xml"
-    filepath = "#{@config["contents"]}#{filename}"
+    filepath = @config["contents"] + filename
     File.open(filepath, "w") {|f|
       comments.each {|comment| f.puts(comment) }
     }
@@ -145,27 +170,36 @@ class NicovideoDownloader
     }
 
     filename = "#{live_id}.jpg"
-    filepath = "#{@config["contents"]}#{filename}"
+    filepath = @config["contents"] + filename
     File.open(filepath, "wb") {|f|
       f.write(thumbnail)
     }
   end
-  def download(id, live_id, title)
+  def download(live_id, nico_live_id, title)
     begin
-      status = get_player_status(live_id)
+      status = get_player_status(nico_live_id)
       wayback_key = get_wayback_key(status[:thread])
 
-      @logs.d("downloader", "download video: #{title}")
-      filename, filesize = download_video({
-        :live_id => live_id,
-        :url => URI.parse(status[:url]),
-        :playpath => status[:playpath],
-        :ticket => status[:ticket],
-      })
+      status[:contents].each {|content|
+        # 既にダウンロード済みならスキップする
+        filename = File.basename(content[:playpath]).sub(/\.f4v$/, ".flv")
+        next if @videos.select_by_filename(filename).num_rows != 0
 
-      @logs.d("downloader", "download comments: #{title}")
+        filename, filesize = download_video({
+          :live_id => nico_live_id,
+          :url => URI.parse(status[:url]),
+          :ticket => status[:ticket],
+          :filename => filename,
+          :playpath => "mp4:" + content[:playpath],
+        })
+
+        @logs.d("downloader", "download/videos: #{filename}")
+        @videos.insert_into(live_id, content[:vpos], filename, filesize)
+      }
+
+      @logs.d("downloader", "download/comments: #{title}")
       download_comments({
-        :live_id => live_id,
+        :live_id => nico_live_id,
         :address => status[:address],
         :port => status[:port],
         :thread => status[:thread],
@@ -174,17 +208,17 @@ class NicovideoDownloader
         :user_id => status[:user_id],
       })
 
-      @logs.d("downloader", "download thumbnail: #{title}")
-      download_thumbnail(live_id)
+      @logs.d("downloader", "download/thumbnail: #{title}")
+      download_thumbnail(nico_live_id)
 
-      @logs.d("downloader", "modified: #{title}")
-      @lives.update_with_success(filename, filesize, id)
+      @logs.d("downloader", "download: #{title}")
+      @lives.update_with_success(live_id)
       sleep 30
     rescue StandardError => e
-      @logs.e("downloader", "unavailable: #{title}")
-      @logs.e("downloader", e.message)
+      @logs.e("downloader", "download/unavailable: #{title}")
+      @logs.e("downloader", "download/unavailable: #{e.message}")
       $stderr.puts(e.backtrace)
-      @lives.update_with_failure(id)
+      @lives.update_with_failure(live_id)
     end
   end
   def main
@@ -193,12 +227,12 @@ class NicovideoDownloader
     @session = @nicovideo.instance_variable_get(:@session)
 
     begin
-      @lives.select.each_hash {|row|
+      @lives.select_all.each_hash {|row|
         download(row["id"], row["nicoLiveId"], row["title"])
       }
     rescue Exception => e
-      @logs.e("downloader", "an unexpected error has occurred")
-      @logs.e("downloader", e.message)
+      @logs.e("downloader", "error: #{e.message}")
+      @logs.e("downloader", "trace: #{e.backtrace}")
       $stderr.puts(e.backtrace)
     ensure
       Model::close
