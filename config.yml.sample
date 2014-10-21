@@ -8,7 +8,7 @@ db:
   host: "127.0.0.1"
   user: fuga
   password: piyo
-  name: nicokako
+  database: nicokako
 
 # サイトの設定
 application_title: NicoKako
