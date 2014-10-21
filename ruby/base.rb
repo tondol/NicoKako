@@ -11,13 +11,13 @@ module Model
     @@db = Mysql::new(config["db"]["host"],
       config["db"]["user"],
       config["db"]["password"],
-      config["db"]["name"])
+      config["db"]["database"])
   end
   def self.close
     @@db.close
   end
   def self.config
-    YAML.load_file(File.dirname(__FILE__) + '/config.yml')
+    YAML.load_file(File.dirname(File.dirname(__FILE__)) + '/config.yml')
   end
   def self.db
     @@db

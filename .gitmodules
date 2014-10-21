@@ -1,3 +1,6 @@
 [submodule "ruby/NicoVideo"]
 	path = ruby/NicoVideo
 	url = https://github.com/tondol/Nicovideo.git
+[submodule "php/spyc"]
+	path = php/spyc
+	url = https://github.com/mustangostang/spyc.git

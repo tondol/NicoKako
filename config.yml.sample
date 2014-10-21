@@ -10,5 +10,10 @@ db:
   password: piyo
   name: nicokako
 
+# サイトの設定
+application_title: NicoKako
+application_url: http://fuga.hoge.com/
+
 # ダウンロードしたファイルの保存先（絶対パス）
-contents: /home/fuga/nicokako/public/contents/
+contents_dir: /home/fuga/nicokako/public/contents/
+contents_url: http://fuga.hoge.com/contents/

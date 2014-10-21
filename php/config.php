@@ -5,10 +5,14 @@ define('PUBLIC_DIR', dirname(dirname(__FILE__)) . '/public/');
 define('CORE_DIR', SYSTEM_DIR . 'core/');
 define('CONTROLLER_DIR', SYSTEM_DIR . 'controller/');
 define('TEMPLATE_DIR', SYSTEM_DIR . 'template/');
+define('SPYC_DIR', SYSTEM_DIR . 'spyc/');
 
 ini_set('display_errors', true);
 ini_set('error_reporting', E_ALL ^ E_NOTICE);
-ini_set('include_path', ini_get('include_path') . ':' . CORE_DIR);
+ini_set('include_path', ini_get('include_path') . ':' . CORE_DIR . ':' . SPYC_DIR);
+ini_set('date.timezone', "Asia/Tokyo");
+
+require_once 'Spyc.php';
 
 $config = array(
 	'controller_dir' => CONTROLLER_DIR,
@@ -20,28 +24,15 @@ $config = array(
 
 	'chain' => array(
 		'index' => 'index',
-		'live' => 'live',
+                'live' => 'live',
 		'live/video' => 'video',
 		'live/delete' => 'delete',
 		'live/video/delete' => 'delete',
-		'register' => 'register',
+                'register' => 'register',
 		'logs' => 'logs',
 		'help' => 'help',
 		'missing' => 'missing',
 	),
-
-	// サイトの設定
-	'application_title' => 'NicoKako',
-	'application_url' => 'http://fuga.hoge.com/',
-
-	// データベースの設定
-	'db' => array(
-		'database' => 'nicokako',
-		'host' => 'localhost',
-		'user' => 'fuga',
-		'password' => 'piyo',
-	),
-
-	// コンテンツの保存先
-	'contents_url' => 'http://kako.tondol.com/contents/',
 );
+
+$config = array_merge($config, Spyc::YAMLLoad(dirname(SYSTEM_DIR) . '/config.yml'));
