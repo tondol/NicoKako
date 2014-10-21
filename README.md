@@ -22,12 +22,13 @@ Install
 
 ~~~~
 $ git clone https://github.com/tondol/NicoKako.git ~/www/nicokako
+$ cd ~/www/nicokako
+$ git submodule update --init
 ~~~~
 
 ### config.ymlの編集
 
 ~~~~
-$ cd ~/www/nicokako
 $ cp config.yml.sample config.yml
 $ vim config.yml
 ~~~~
