@@ -66,7 +66,7 @@ class Controller_live_delete extends Controller {
 
 		$this->clean_files();
 		$videos->delete_by_live_id($this->live["id"]);
-		$channels->delete($this->live["id"]);
+		$lives->delete($this->live["id"]);
 		$logs->d("front", "live/delete: " . $this->live["title"]);
 
 		$this->is_success = true;

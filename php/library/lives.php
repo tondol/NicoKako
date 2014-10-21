@@ -51,4 +51,10 @@ class Model_lives {
 		$statement->execute();
 		return $statement->fetchColumn();
 	}
+	function delete($id) {
+		$sql = "DELETE FROM `lives`" .
+			" WHERE `id` = ?";
+		$statement = $this->db->prepare($sql);
+		return $statement->execute(array($id));
+	}
 }

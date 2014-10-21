@@ -15,4 +15,28 @@ class Model_logs {
 		$statement->execute();
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
+	function d($name, $message) {
+		$sql = "INSERT INTO `logs`" .
+			" (`kind`, `name`, `message`, `createdAt`)" .
+			" VALUES (?, ?, ?, ?)";
+		$statement = $this->db->prepare($sql);
+		return $statement->execute(array(
+			"d",
+			$name,
+			$message,
+			current_date(),
+		));
+	}
+	function e($name, $message) {
+		$sql = "INSERT INTO `logs`" .
+			" (`kind`, `name`, `message`, `createdAt`)" .
+			" VALUES (?, ?, ?, ?)";
+		$statement = $this->db->prepare($sql);
+		return $statement->execute(array(
+			"e",
+			$name,
+			$message,
+			current_date(),
+		));
+	}
 }

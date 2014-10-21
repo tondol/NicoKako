@@ -38,4 +38,16 @@ class Model_videos {
 		$statement->execute();
 		return $statement->fetchColumn();
 	}
+	function delete($id) {
+		$sql = "DELETE FROM `videos`" .
+			" WHERE `id` = ?";
+		$statement = $this->db->prepare($sql);
+		return $statement->execute(array($id));
+	}
+	function delete_by_live_id($live_id) {
+		$sql = "DELETE FROM `videos`" .
+			" WHERE `liveId` = ?";
+		$statement = $this->db->prepare($sql);
+		return $statement->execute(array($live_id));
+	}
 }
