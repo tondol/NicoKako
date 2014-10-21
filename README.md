@@ -24,25 +24,15 @@ Install
 $ git clone https://github.com/tondol/NicoKako.git ~/www/nicokako
 ~~~~
 
-### php/config.phpの編集
+### config.ymlの編集
 
 ~~~~
-$ cd ~/www/nicokako/php
-$ cp config.php.sample config.php
-$ vim config.php
-~~~~
-
-サイトURL，MySQLへの接続設定（ホスト名，データベース名，ユーザー名，パスワード）を編集します。
-
-### ruby/config.ymlの編集
-
-~~~~
-$ cd ~/www/nicokako/ruby
+$ cd ~/www/nicokako
 $ cp config.yml.sample config.yml
 $ vim config.yml
 ~~~~
 
-タイムシフトのダウンロードに使用するアカウントの設定（メールアドレス，パスワード），MySQLへの接続設定，タイムシフトのダウンロード先パスを編集します。
+MySQLへの接続設定（ホスト名，データベース名，ユーザー名，パスワード），タイムシフトのダウンロードに使用するアカウントの設定（メールアドレス，パスワード）などを編集します。
 
 ### rtmpdumpの導入
 
