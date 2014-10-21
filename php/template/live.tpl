@@ -64,4 +64,17 @@
 	</a>
 </p>
 
+<div class="page-header">
+	<h2>maintenance <small>管理</small></h2>
+</div>
+
+<p>
+<?php
+	$delete_url = $this->get_url("live/delete") . "?id={$live["id"]}";
+?>
+	<a href="<?= h($delete_url) ?>" class="btn btn-danger">
+		この生放送を削除する
+	</a>
+</p>
+
 <?php $this->include_template('include/footer.tpl') ?>
