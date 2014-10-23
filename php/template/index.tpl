@@ -21,7 +21,7 @@
 		?>
 	<div class="col-sm-4 col-md-3">
 		<div class="thumbnail">
-		<?php if (isset($live["downloadedAt"])): ?>
+		<?php if (isset($live["downloadedAt"]) && !isset($live["deletedAt"])): ?>
 			<a href="<?= h($live_url) ?>">
 				<img src="<?= h($thumbnail_url) ?>" height="144" />
 			</a>
@@ -30,7 +30,7 @@
 		<?php endif ?>
 			<div class="caption">
 				<p><?= h($live["title"]) ?></p>
-		<?php if (isset($live["downloadedAt"])): ?>
+		<?php if (isset($live["downloadedAt"]) && !isset($live["deletedAt"])): ?>
 				<p><a href="<?= h($live_url) ?>" class="btn btn-primary">
 					再生する
 				</a></p>
