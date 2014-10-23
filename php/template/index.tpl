@@ -16,18 +16,19 @@
 	<?php foreach ($this->get("lives") as $live): ?>
 		<?php
 			$thumbnail_url = $this->get_public("contents/" . $live["nicoLiveId"] . ".jpg");
-			$unavailable_url = $this->get_public("assets/images/unavailable.png");
 			$live_url = $this->get_url("live") . "?id=" . $live["id"];
 		?>
 	<div class="col-sm-4 col-md-3">
 		<div class="thumbnail">
-		<?php if (isset($live["downloadedAt"]) && !isset($live["deletedAt"])): ?>
 			<a href="<?= h($live_url) ?>">
-				<img src="<?= h($thumbnail_url) ?>" height="144" />
-			</a>
+		<?php if (isset($live["deletedAt"])): ?>
+				<div class="text-box"><span>UNAVAILABLE</span></div>
+		<?php elseif (!isset($live["downloadedAt"])): ?>
+				<div class="text-box"><span>NOW DOWNLOADING</span></div>
 		<?php else: ?>
-				<img src="<?= h($unavailable_url) ?>" height="144" />
+				<img src="<?= h($thumbnail_url) ?>" height="144" />
 		<?php endif ?>
+			</a>
 			<div class="caption">
 				<p><?= h($live["title"]) ?></p>
 		<?php if (isset($live["downloadedAt"]) && !isset($live["deletedAt"])): ?>

@@ -75,6 +75,30 @@ body > .container > .container {
 	/* 横幅を箱一杯にする */
 	width: 100%;
 }
+.thumbnail .text-box {
+	margin: 0 auto;
+	width: 192px;
+	height: 144px;
+	background: #000000;
+}
+.thumbnail .text-box span {
+	/* テキストをセンタリングする */
+	display: table-cell;
+	width: 192px;
+	height: 144px;
+	color: #ffffff;
+	text-align: center;
+	vertical-align: middle;
+}
+.thumbnail a:focus,
+.thumbnail a:hover {
+	/* リンクの下線を無効化する */
+	text-decoration: none;
+}
+.thumbnail a:focus .text-box,
+.thumbnail a:hover .text-box {
+	background: #333333;
+}
 
 /*
  * 要素の余白調整
