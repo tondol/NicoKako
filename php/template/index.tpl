@@ -8,7 +8,7 @@
 <p>初めての方は<a href="<?= h($this->get_url("help")) ?>">help</a>をどうぞ。</p>
 
 <div class="page-header">
-	<h2>lives <small>番組一覧</small></h2>
+	<h2>lives <small>放送一覧</small></h2>
 </div>
 
 <?php if (count($this->get("lives"))): ?>
@@ -35,7 +35,9 @@
 					再生する
 				</a></p>
 		<?php else: ?>
-				<p><a class="btn btn-primary disabled">未ダウンロード</a></p>
+				<p><a href="<?= h($live_url) ?>" class="btn btn-info">
+					未ダウンロード
+				</a></p>
 		<?php endif ?>
 			</div><!-- /caption -->
 		</div><!-- /thumbnail -->
@@ -43,7 +45,7 @@
 	<?php endforeach ?>
 </div><!-- /row -->
 <?php else: ?>
-<p>番組がありません。</p>
+<p>放送がありません。</p>
 <?php endif ?>
 
 <?php $this->include_template('include/footer.tpl') ?>

@@ -31,17 +31,17 @@ module Model
     def initialize
       @db = Model::db
     end
-    def select_all
+    def select(id)
+      statement = @db.prepare("SELECT * FROM `lives`" +
+        " WHERE `id` = ?")
+      statement.execute(id)
+    end
+    def select_all_not_downloaded
       # ダウンロード対象の動画を取得する
       statement = @db.prepare("SELECT * FROM `lives`" +
         " WHERE `downloadedAt` IS NULL AND `deletedAt` IS NULL" +
         " ORDER BY `createdAt` ASC")
       statement.execute
-    end
-    def select(id)
-      statement = @db.prepare("SELECT * FROM `lives`" +
-        " WHERE `id` = ?")
-      statement.execute(id)
     end
     def update_with_success(id)
       statement = @db.prepare("UPDATE `lives`" +

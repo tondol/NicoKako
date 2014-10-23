@@ -73,7 +73,7 @@
 	$delete_url = $this->get_url("live/delete") . "?id={$live["id"]}";
 ?>
 	<a href="<?= h($delete_url) ?>" class="btn btn-danger">
-		この生放送を削除する
+		この放送を削除する
 	</a>
 </p>
 

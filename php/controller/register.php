@@ -45,6 +45,7 @@ class Controller_register extends Controller {
 	function validate() {
 		$this->get_live_id();
 		$this->get_live_title();
+		$this->get_live();
 
 		if (is_null($this->live_id)) {
 			$this->is_valid = false;
@@ -57,7 +58,7 @@ class Controller_register extends Controller {
 		} else if ($this->live) {
 			$this->is_valid = false;
 			$this->validation_error[] =
-				"この番組はすでに登録されています。";
+				"この放送はすでに登録されています。";
 		}
 
 		return $this->is_valid;
@@ -73,7 +74,7 @@ class Controller_register extends Controller {
 		} else {
 			$this->is_success = false;
 			$this->submission_error[] =
-				"番組の登録に失敗しました。";
+				"放送の登録に失敗しました。";
 		}
 
 		return $this->is_success;

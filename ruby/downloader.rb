@@ -17,35 +17,48 @@ class NicovideoDownloader
     @logs = Model::Logs.new
   end
 
-  def get_player_status(live_id)
-    Net::HTTP.start("ow.live.nicovideo.jp", 80) {|w|
-      request = "/api/getplayerstatus?v=" + live_id
-      response = w.get(request, 'Cookie' => @session)
-      status = response.body
-      raise Nicovideo::UnavailableVideoError.new if status.include?("<code>closed</code>")
-
-      video_id = nil
-      document = Nokogiri::XML(status)
-      quesheet = document.xpath('//stream/quesheet')
-      quesheet.xpath('que').each {|que|
-        next unless que.text.start_with?("/play")
-        streams = que.text.split[1].split(',')
-        streams.each {|stream|
-          fields = stream.split(':')
-          next if fields[0] != "premium"
-          video_id = fields[2]
-        }
+  def get_stream_id(document)
+    stream_id = nil
+    quesheet = document.xpath('//stream/quesheet')
+    quesheet.xpath('que').each {|que|
+      next unless que.text.start_with?("/play")
+      streams = que.text.split[1].split(',')
+      streams.each {|stream|
+        fields = stream.split(':')
+        if fields.size == 3 && fields[0] == "premium"
+          return fields[2]
+        else
+          stream_id = fields.last
+        end
       }
-      contents = []
-      quesheet.xpath('que').each {|que|
-        next unless que.text.start_with?("/publish")
-        fields = que.text.split
-        next if fields[1] != video_id
+    }
+    stream_id
+  end
+  def get_stream_contents(document, stream_id)
+    contents = []
+    quesheet = document.xpath('//stream/quesheet')
+    quesheet.xpath('que').each {|que|
+      next unless que.text.start_with?("/publish")
+      fields = que.text.split
+      if fields[1] == stream_id
         contents << {
           :vpos => que.attribute('vpos').value,
           :playpath => fields[2],
         }
-      }
+      end
+    }
+    contents
+  end
+  def get_player_status(live_id)
+    Net::HTTP.start("ow.live.nicovideo.jp", 80) {|w|
+      request = "/api/getplayerstatus?v=#{live_id}"
+      response = w.get(request, 'Cookie' => @session)
+      status = response.body
+      raise Nicovideo::UnavailableVideoError.new if status.include?("<code>closed</code>")
+
+      document = Nokogiri::XML(status)
+      stream_id = get_stream_id(document)
+      contents = get_stream_contents(document, stream_id)
 
       params = {}
       params[:url] = document.xpath('//rtmp/url').text
@@ -75,7 +88,7 @@ class NicovideoDownloader
   end
 
   def download_video(params)
-    tc_url = "#{params[:url].to_s}"
+    tc_url = params[:url].to_s
     page_url = "http://live.nicovideo.jp/watch/#{params[:live_id]}"
     swf_url = "http://live.nicovideo.jp/nicoliveplayer.swf?131118162200"
     flash_ver = %q{"WIN 11,6,602,180"}
@@ -175,9 +188,9 @@ class NicovideoDownloader
       f.write(thumbnail)
     }
   end
-  def download(live_id, nico_live_id, title)
+  def download(live)
     begin
-      status = get_player_status(nico_live_id)
+      status = get_player_status(live["nicoLiveId"])
       wayback_key = get_wayback_key(status[:thread])
 
       status[:contents].each {|content|
@@ -186,7 +199,7 @@ class NicovideoDownloader
         next if @videos.select_by_filename(filename).num_rows != 0
 
         filename, filesize = download_video({
-          :live_id => nico_live_id,
+          :live_id => live["nicoLiveId"],
           :url => URI.parse(status[:url]),
           :ticket => status[:ticket],
           :filename => filename,
@@ -194,12 +207,12 @@ class NicovideoDownloader
         })
 
         @logs.d("downloader", "download/videos: #{filename}")
-        @videos.insert_into(live_id, content[:vpos], filename, filesize)
+        @videos.insert_into(live["id"], content[:vpos], filename, filesize)
       }
 
-      @logs.d("downloader", "download/comments: #{title}")
+      @logs.d("downloader", "download/comments: #{live["title"]}")
       download_comments({
-        :live_id => nico_live_id,
+        :live_id => live["nicoLiveId"],
         :address => status[:address],
         :port => status[:port],
         :thread => status[:thread],
@@ -208,17 +221,17 @@ class NicovideoDownloader
         :user_id => status[:user_id],
       })
 
-      @logs.d("downloader", "download/thumbnail: #{title}")
-      download_thumbnail(nico_live_id)
+      @logs.d("downloader", "download/thumbnail: #{live["title"]}")
+      download_thumbnail(live["nicoLiveId"])
 
-      @logs.d("downloader", "download: #{title}")
-      @lives.update_with_success(live_id)
+      @logs.d("downloader", "download: #{live["title"]}")
+      @lives.update_with_success(live["id"])
       sleep 30
     rescue StandardError => e
-      @logs.e("downloader", "download/unavailable: #{title}")
+      @logs.e("downloader", "download/unavailable: #{live["title"]}")
       @logs.e("downloader", "download/unavailable: #{e.message}")
       $stderr.puts(e.backtrace)
-      @lives.update_with_failure(live_id)
+      @lives.update_with_failure(live["id"])
     end
   end
   def main
@@ -227,8 +240,8 @@ class NicovideoDownloader
     @session = @nicovideo.instance_variable_get(:@session)
 
     begin
-      @lives.select_all.each_hash {|row|
-        download(row["id"], row["nicoLiveId"], row["title"])
+      @lives.select_all_not_downloaded.each_hash {|live|
+        download(live)
       }
     rescue Exception => e
       @logs.e("downloader", "error: #{e.message}")

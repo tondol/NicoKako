@@ -9,7 +9,7 @@
 </div>
 
 <dl>
-	<dt>番組数</dt>
+	<dt>放送数</dt>
 	<dd><?= h($this->get("count_lives")) ?>個</dd>
 	<dt>ダウンロードした動画数</dt>
 	<dd><?= h($this->get("count_videos")) ?>個</dd>
