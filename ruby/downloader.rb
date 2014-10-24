@@ -1,10 +1,6 @@
 #!/usr/local/bin/ruby
 # -*- coding: utf-8 -*-
 
-require 'mysql'
-require 'yaml'
-require 'nokogiri'
-
 require_relative 'NicoVideo/nico'
 require_relative 'base'
 
@@ -15,76 +11,6 @@ class NicovideoDownloader
     @lives = Model::Lives.new
     @videos = Model::Videos.new
     @logs = Model::Logs.new
-  end
-
-  def get_stream_id(document)
-    stream_id = nil
-    quesheet = document.xpath('//stream/quesheet')
-    quesheet.xpath('que').each {|que|
-      next unless que.text.start_with?("/play")
-      streams = que.text.split[1].split(',')
-      streams.each {|stream|
-        fields = stream.split(':')
-        if fields.size == 3 && fields[0] == "premium"
-          return fields[2]
-        else
-          stream_id = fields.last
-        end
-      }
-    }
-    stream_id
-  end
-  def get_stream_contents(document, stream_id)
-    contents = []
-    quesheet = document.xpath('//stream/quesheet')
-    quesheet.xpath('que').each {|que|
-      next unless que.text.start_with?("/publish")
-      fields = que.text.split
-      if fields[1] == stream_id
-        contents << {
-          :vpos => que.attribute('vpos').value,
-          :playpath => fields[2],
-        }
-      end
-    }
-    contents
-  end
-  def get_player_status(live_id)
-    Net::HTTP.start("ow.live.nicovideo.jp", 80) {|w|
-      request = "/api/getplayerstatus?v=#{live_id}"
-      response = w.get(request, 'Cookie' => @session)
-      status = response.body
-      raise Nicovideo::UnavailableVideoError.new if status.include?("<code>closed</code>")
-
-      document = Nokogiri::XML(status)
-      stream_id = get_stream_id(document)
-      contents = get_stream_contents(document, stream_id)
-
-      params = {}
-      params[:url] = document.xpath('//rtmp/url').text
-      params[:ticket] = document.xpath('//rtmp/ticket').text
-      params[:user_id] = document.xpath('//user/user_id').text
-      params[:address] = document.xpath('//ms/addr').text
-      params[:port] = document.xpath('//ms/port').text
-      params[:thread] = document.xpath('//ms/thread').text
-      params[:contents] = contents
-      params[:end_time] = document.xpath('//stream/end_time').text
-      return params
-    }
-  end
-  def get_wayback_key(thread)
-    Net::HTTP.start("watch.live.nicovideo.jp", 80) {|w|
-      request = "/api/getwaybackkey?thread=" + thread
-      response = w.get(request, 'Cookie' => @session)
-      return $1 if response.body =~ /^waybackkey=([-.0-9A-Za-z]+)$/
-    }
-  end
-  def get_thumbnail_url(live_id)
-    Net::HTTP.start("live.nicovideo.jp", 80) {|w|
-      request = "/gate/" + live_id
-      response = w.get(request, 'Cookie' => @session)
-      return URI.parse($1) if response.body =~ %r|(http://live.nicovideo.jp/thumb/[0-9]+\.jpg)|
-    }
   end
 
   def download_video(params)
@@ -190,18 +116,18 @@ class NicovideoDownloader
   end
   def download(live)
     begin
-      status = get_player_status(live["nicoLiveId"])
-      wayback_key = get_wayback_key(status[:thread])
+      player_status = Nicovideo::PlayerStatus.new(@session, live["nicoLiveId"])
+      params = player_status.params
 
-      status[:contents].each {|content|
+      params[:contents].each {|content|
         # 既にダウンロード済みならスキップする
         filename = File.basename(content[:playpath]).sub(/\.f4v$/, ".flv")
         next if @videos.select_by_filename(filename).num_rows != 0
 
         filename, filesize = download_video({
           :live_id => live["nicoLiveId"],
-          :url => URI.parse(status[:url]),
-          :ticket => status[:ticket],
+          :url => URI.parse(params[:url]),
+          :ticket => params[:ticket],
           :filename => filename,
           :playpath => "mp4:" + content[:playpath],
         })
@@ -213,12 +139,12 @@ class NicovideoDownloader
       @logs.d("downloader", "download/comments: #{live["title"]}")
       download_comments({
         :live_id => live["nicoLiveId"],
-        :address => status[:address],
-        :port => status[:port],
-        :thread => status[:thread],
-        :when => status[:end_time],
-        :wayback_key => wayback_key,
-        :user_id => status[:user_id],
+        :address => params[:address],
+        :port => params[:port],
+        :thread => params[:thread],
+        :when => params[:end_time],
+        :wayback_key => player_status.wayback_key,
+        :user_id => params[:user_id],
       })
 
       @logs.d("downloader", "download/thumbnail: #{live["title"]}")

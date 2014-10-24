@@ -7,8 +7,12 @@ Requirements
 ----
 
 - Ruby（Version 1.9 もしくはそれ以降）
+    - Nokogiri
     - Ruby/MySQL
 - PHP（Version 5.3 もしくはそれ以降）
+    - DOM
+    - JSON
+    - PDO (MySQL)
 - Apache
     - mod_rewrite
 - MySQL

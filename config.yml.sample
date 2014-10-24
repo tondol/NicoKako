@@ -1,7 +1,9 @@
 # ニコニコ動画の設定
+# quality: default or premium
 nv:
   mail: fuga@hoge.com
   password: piyo
+  quality: premium
 
 # データベースの設定
 db:

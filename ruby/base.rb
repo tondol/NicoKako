@@ -3,6 +3,7 @@
 
 require 'mysql'
 require 'yaml'
+require 'nokogiri'
 
 require_relative 'NicoVideo/nico'
 
@@ -116,6 +117,86 @@ module Model
         " (`kind`, `name`, `message`, `createdAt`)" +
         " VALUES (?, ?, ?, ?)")
       statement.execute("e", name, message, Time.now)
+    end
+  end
+end
+
+module Nicovideo
+  class PlayerStatus
+    def initialize(session, live_id)
+      @session = session
+      @live_id = live_id
+    end
+    def stream_id(document)
+      stream_id = nil
+      quesheet = document.xpath('//stream/quesheet')
+      quesheet.xpath('que').each {|que|
+        next unless que.text.start_with?("/play")
+        streams = que.text.split[1].split(',')
+        streams.each {|stream|
+          fields = stream.split(':')
+          if fields.size == 3 && fields[0] == @config["nv"]["quality"]
+            return fields[2]
+          else
+            stream_id = fields.last
+          end
+        }
+      }
+      stream_id
+    end
+    def stream_contents(document, stream_id)
+      contents = []
+      quesheet = document.xpath('//stream/quesheet')
+      quesheet.xpath('que').each {|que|
+        next unless que.text.start_with?("/publish")
+        fields = que.text.split
+        if fields[1] == stream_id
+          contents << {
+            :vpos => que.attribute('vpos').value,
+            :playpath => fields[2],
+          }
+        end
+      }
+      contents
+    end
+    def params
+      return @params if @params
+  
+      Net::HTTP.start("ow.live.nicovideo.jp", 80) {|w|
+        request = "/api/getplayerstatus?v=#{@live_id}"
+        response = w.get(request, 'Cookie' => @session)
+        status = response.body
+        raise Nicovideo::UnavailableVideoError.new if status.include?("<code>closed</code>")
+  
+        document = Nokogiri::XML(status)
+        contents = stream_contents(document, stream_id(document))
+  
+        @params = {}
+        @params[:url] = document.xpath('//rtmp/url').text
+        @params[:ticket] = document.xpath('//rtmp/ticket').text
+        @params[:user_id] = document.xpath('//user/user_id').text
+        @params[:address] = document.xpath('//ms/addr').text
+        @params[:port] = document.xpath('//ms/port').text
+        @params[:thread] = document.xpath('//ms/thread').text
+        @params[:contents] = contents
+        @params[:end_time] = document.xpath('//stream/end_time').text
+      }
+  
+      @params
+    end
+    def wayback_key
+      Net::HTTP.start("watch.live.nicovideo.jp", 80) {|w|
+        request = "/api/getwaybackkey?thread=" + params[:thread]
+        response = w.get(request, 'Cookie' => @session)
+        return $1 if response.body =~ /^waybackkey=([-.0-9A-Za-z]+)$/
+      }
+    end
+    def thumbnail_url
+      Net::HTTP.start("live.nicovideo.jp", 80) {|w|
+        request = "/gate/" + @live_id
+        response = w.get(request, 'Cookie' => @session)
+        return URI.parse($1) if response.body =~ %r|(http://live.nicovideo.jp/thumb/[0-9]+\.jpg)|
+      }
     end
   end
 end

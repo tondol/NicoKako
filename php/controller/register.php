@@ -47,6 +47,14 @@ class Controller_register extends Controller {
 		$this->get_live_title();
 		$this->get_live();
 
+		# live_idは英数字のみから構成される
+		if (isset($this->post["confirm"])) {
+			ob_start();
+			passthru("ruby " . SYSTEM_DIR . "../ruby/get_player_status.rb {$this->live_id}");
+			$this->params = json_decode(ob_get_contents(), true);
+			ob_end_clean();
+		}
+
 		if (is_null($this->live_id)) {
 			$this->is_valid = false;
 			$this->validation_error[] =
@@ -59,6 +67,10 @@ class Controller_register extends Controller {
 			$this->is_valid = false;
 			$this->validation_error[] =
 				"この放送はすでに登録されています。";
+		} else if (isset($this->post["confirm"]) && empty($this->params["contents"])) {
+			$this->is_valid = false;
+			$this->validation_error[] =
+				"タイムシフト再生情報を取得できません。";
 		}
 
 		return $this->is_valid;
@@ -84,11 +96,13 @@ class Controller_register extends Controller {
 			$this->validate();
 			$this->set("live_id", $this->live_id);
 			$this->set("live_title", $this->live_title);
+			$this->set("params", $this->params);
 
 		} else if (isset($this->post["submit"])) {
 			$this->validate();
 			$this->set("live_id", $this->live_id);
 			$this->set("live_title", $this->live_title);
+			$this->set("params", $this->params);
 
 			if ($this->is_valid) {
 				$this->submit();

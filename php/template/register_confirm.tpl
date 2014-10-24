@@ -1,6 +1,7 @@
 <?php
 	$live_id = $this->get("live_id");
 	$live_title = $this->get("live_title");
+	$params = $this->get("params");
 ?>
 
 <div class="page-header">
@@ -16,6 +17,12 @@
 		<div class="form-group">
 			<label>タイトル</label>
 			<input type="text" value="<?= h($live_title) ?>" class="form-control" />
+		</div>
+		<div class="form-group">
+			<label>ダウンロード対象</label>
+<?php foreach ($params["contents"] as $content): ?>
+			<input type="text" value="<?= h($content["playpath"]) ?>" class="form-control" />
+<?php endforeach ?>
 		</div>
 	</fieldset>
 	<input name="url" type="hidden" value="<?= h($this->post["url"]) ?>" />
