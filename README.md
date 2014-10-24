@@ -108,6 +108,13 @@ NICOKAKO_DIR=/home/fuga/www/nicokako/ruby
 0 * * * * ruby $NICOKAKO_DIR/downloader.rb >> $NICOKAKO_DIR/nicokako.log 2>> $NICOKAKO_DIR/error.log
 ~~~~
 
+### ApacheプロセスからRubyを実行可能であることを確認
+
+Rubyをユーザーのホームディレクトリ以下にインストールしているようなケース（たとえば，rbenvを公式のチュートリアルに従いインストールしているとき）では，PHP側からのRubyスクリプトの呼び出し部分がうまく動かないことがあります。
+そのようなケースでは，`/etc/sysconfig/httpd`もしくは`/etc/apache2/envvars`を編集し，Apacheプロセス実行時のPATHに適宜ディレクトリを追加してください（たとえば，`export PATH=/home/fuga/.rbenv/shims:$PATH`）。
+場合によりディレクトリのパーミッションを変更する必要もあるかもしれません。
+また，設定ファイル編集後にApacheを再起動することにも留意してください。
+
 HOW TO USE
 ----
 
