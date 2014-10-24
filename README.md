@@ -55,7 +55,7 @@ $ sudo make install
 
 ### httpd.confの編集
 
-`&lt;設置したパス&gt;/public`をドキュメントルートとして設定します。
+`<設置したパス>/public`をドキュメントルートとして設定します。
 
 ~~~~
 # 記述例
@@ -124,4 +124,4 @@ export PATH=/home/fuga/.rbenv/shims:$PATH
 HOW TO USE
 ----
 
-`&lt;設置先URL&gt;/help/`をブラウザで閲覧してください。
+`<設置先URL>/help/`をブラウザで閲覧してください。
