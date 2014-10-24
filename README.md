@@ -55,7 +55,7 @@ $ sudo make install
 
 ### httpd.confの編集
 
-&lt;設置したパス&gt;/public をドキュメントルートとして設定します。
+`&lt;設置したパス&gt;/public`をドキュメントルートとして設定します。
 
 ~~~~
 # 記述例
@@ -81,7 +81,7 @@ $ vim .htaccess
 ### 必要なテーブルを作成
 
 データベースに必要なテーブルを作成します。
-コマンド例のユーザー名（fuga）やデータベース名（nicokako）は適宜変更してください。
+コマンド例のユーザー名（`fuga`）やデータベース名（`nicokako`）は適宜変更してください。
 
 ~~~~
 $ cd ~/www/nicokako
@@ -90,7 +90,7 @@ $ mysql -u fuga -p -default-character-set=utf8 nicokako < INSTALL.sql
 
 ### crontabの設定
 
-ruby/downloader.rb を定期実行するように設定します。
+`ruby/downloader.rb`を定期実行するように設定します。
 
 ~~~~
 $ crontab -e
@@ -111,11 +111,17 @@ NICOKAKO_DIR=/home/fuga/www/nicokako/ruby
 ### ApacheプロセスからRubyを実行可能であることを確認
 
 Rubyをユーザーのホームディレクトリ以下にインストールしているようなケース（たとえば，rbenvを公式のチュートリアルに従いインストールしているとき）では，PHP側からのRubyスクリプトの呼び出し部分がうまく動かないことがあります。
-そのようなケースでは，`/etc/sysconfig/httpd`もしくは`/etc/apache2/envvars`を編集し，Apacheプロセス実行時のPATHに適宜ディレクトリを追加してください（たとえば，`export PATH=/home/fuga/.rbenv/shims:$PATH`）。
+そのようなケースでは，`/etc/sysconfig/httpd`もしくは`/etc/apache2/envvars`を編集し，Apacheプロセス実行時のPATHに適宜ディレクトリを追加してください。
+
+~~~~
+# 記述例
+export PATH=/home/fuga/.rbenv/shims:$PATH
+~~~~
+
 場合によりディレクトリのパーミッションを変更する必要もあるかもしれません。
 また，設定ファイル編集後にApacheを再起動することにも留意してください。
 
 HOW TO USE
 ----
 
-&lt;設置先URL&gt;/help/ をブラウザで閲覧してください。
+`&lt;設置先URL&gt;/help/`をブラウザで閲覧してください。
