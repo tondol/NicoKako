@@ -98,9 +98,9 @@ class NicovideoDownloader
       comments.each {|comment| f.puts(comment) }
     }
   end
-  def download_thumbnail(live_id)
+  def download_thumbnail(params)
     thumbnail = nil
-    url = get_thumbnail_url(live_id)
+    url = params[:url]
 
     Net::HTTP.start(url.host, url.port) {|w|
       request = url.path
@@ -108,7 +108,7 @@ class NicovideoDownloader
       thumbnail = response.body
     }
 
-    filename = "#{live_id}.jpg"
+    filename = "#{params[:live_id]}.jpg"
     filepath = @config["contents_dir"] + filename
     File.open(filepath, "wb") {|f|
       f.write(thumbnail)
@@ -126,7 +126,7 @@ class NicovideoDownloader
 
         filename, filesize = download_video({
           :live_id => live["nicoLiveId"],
-          :url => URI.parse(params[:url]),
+          :url => params[:url],
           :ticket => params[:ticket],
           :filename => filename,
           :playpath => "mp4:" + content[:playpath],
@@ -148,7 +148,10 @@ class NicovideoDownloader
       })
 
       @logs.d("downloader", "download/thumbnail: #{live["title"]}")
-      download_thumbnail(live["nicoLiveId"])
+      download_thumbnail({
+        :live_id => live["nicoLiveId"],
+        :url => player_status.thumbnail_url,
+      })
 
       @logs.d("downloader", "download: #{live["title"]}")
       @lives.update_with_success(live["id"])

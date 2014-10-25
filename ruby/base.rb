@@ -135,7 +135,7 @@ module Nicovideo
         streams = que.text.split[1].split(',')
         streams.each {|stream|
           fields = stream.split(':')
-          if fields.size == 3 && fields[0] == @config["nv"]["quality"]
+          if fields.size == 3 && fields[0] == Model::config["nv"]["quality"]
             return fields[2]
           else
             stream_id = fields.last
@@ -172,7 +172,7 @@ module Nicovideo
         contents = stream_contents(document, stream_id(document))
   
         @params = {}
-        @params[:url] = document.xpath('//rtmp/url').text
+        @params[:url] = URI.parse(document.xpath('//rtmp/url').text)
         @params[:ticket] = document.xpath('//rtmp/ticket').text
         @params[:user_id] = document.xpath('//user/user_id').text
         @params[:address] = document.xpath('//ms/addr').text
