@@ -19,7 +19,8 @@ class Model_videos {
 	function select_all_by_live_id($live_id) {
 		$sql = "SELECT *" .
 			" FROM `videos`" .
-			" WHERE `liveId` = ?";
+			" WHERE `liveId` = ?" .
+			" ORDER BY `vpos` ASC";
 		$statement = $this->db->prepare($sql);
 		$statement->execute(array($live_id));
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
