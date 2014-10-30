@@ -1,6 +1,7 @@
 <?php
 
 require_once 'lives.php';
+require_once 'logs.php';
 
 class Controller_register extends Controller {
 	private $db = null;
@@ -50,7 +51,7 @@ class Controller_register extends Controller {
 		# live_idは英数字のみから構成される
 		if (isset($this->post["confirm"])) {
 			ob_start();
-			passthru("ruby " . SYSTEM_DIR . "../ruby/get_player_status.rb {$this->live_id}");
+			passthru("ruby " . SYSTEM_DIR . "ruby/get_player_status.rb {$this->live_id} 2>&1");
 			$this->params = json_decode(ob_get_contents(), true);
 			ob_end_clean();
 		}
@@ -77,9 +78,11 @@ class Controller_register extends Controller {
 	}
 	function submit() {
 		$lives = new Model_lives();
+		$logs = new Model_logs();
 		$result = $lives->insert_into(
 			$this->live_id,
 			$this->live_title);
+		$logs->d("front", "register: " . $this->live_title);
 
 		if ($result) {
 			$this->is_success = true;

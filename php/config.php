@@ -1,11 +1,12 @@
 <?php
 
-define('SYSTEM_DIR', dirname(__FILE__) . '/');
-define('PUBLIC_DIR', dirname(dirname(__FILE__)) . '/public/');
-define('CORE_DIR', SYSTEM_DIR . 'core/');
-define('CONTROLLER_DIR', SYSTEM_DIR . 'controller/');
-define('TEMPLATE_DIR', SYSTEM_DIR . 'template/');
-define('SPYC_DIR', SYSTEM_DIR . 'spyc/');
+define('PHP_DIR', dirname(__FILE__) . '/');
+define('SYSTEM_DIR', dirname(PHP_DIR) . '/');
+define('PUBLIC_DIR', SYSTEM_DIR . 'public/');
+define('CORE_DIR', PHP_DIR . 'core/');
+define('CONTROLLER_DIR', PHP_DIR . 'controller/');
+define('TEMPLATE_DIR', PHP_DIR . 'template/');
+define('SPYC_DIR', PHP_DIR . 'spyc/');
 
 ini_set('display_errors', true);
 ini_set('error_reporting', E_ALL ^ E_NOTICE);
@@ -35,4 +36,4 @@ $config = array(
 	),
 );
 
-$config = array_merge($config, Spyc::YAMLLoad(dirname(SYSTEM_DIR) . '/config.yml'));
+$config = array_merge($config, Spyc::YAMLLoad(SYSTEM_DIR . 'config.yml'));

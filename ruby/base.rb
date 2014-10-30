@@ -18,7 +18,8 @@ module Model
     @@db.close
   end
   def self.config
-    YAML.load_file(File.dirname(File.dirname(__FILE__)) + '/config.yml')
+    config_dir = File.dirname(File.dirname(__FILE__))
+    YAML.load_file(config_dir + '/config.yml')
   end
   def self.db
     @@db

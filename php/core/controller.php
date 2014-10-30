@@ -1,6 +1,6 @@
 <?php
 
-define('LIBRARY_DIR', SYSTEM_DIR . "library/");
+define('LIBRARY_DIR', PHP_DIR . "library/");
 ini_set('include_path', ini_get('include_path') . ':' . LIBRARY_DIR);
 
 class Controller {
