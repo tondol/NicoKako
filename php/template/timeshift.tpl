@@ -2,10 +2,10 @@
 <?php $this->include_template('include/breadcrumb.tpl') ?>
 
 <div class="page-header">
-	<h1><?= h($this->get_title()) ?></h1>
+	<h1><?= h($this->get_title()) ?> <small>タイムシフト予約</small></h1>
 </div>
 <div class="page-header">
-	<h2>reservations <small>タイムシフト予約一覧</small></h2>
+	<h2>reservations <small>予約一覧</small></h2>
 </div>
 
 <?php if (count($this->get("items"))): ?>
