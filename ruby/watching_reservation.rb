@@ -14,22 +14,38 @@ class WatchingReservation
   end
   def get_token
     Net::HTTP.start("live.nicovideo.jp", 80) {|w|
-      request = "/api/watchingreservation?mode=watch_num&vid=#{@video_id}"
+      request = "/my"
       response = w.get(request, 'Cookie' => @session)
       $1 if response.body =~ /(ulck_[0-9]+)/
     }
   end
   def register
+    token = get_token
     Net::HTTP.start("live.nicovideo.jp", 80) {|w|
       request = "/api/watchingreservation"
-      response = w.post(request, "mode=auto_register&vid=#{@video_id}&token=#{get_token}", 'Cookie' => @session)
+      response = w.post(request, "mode=auto_register&vid=#{@video_id}&token=#{token}", 'Cookie' => @session)
+      #pp response.code
+      #pp response.body
+    }
+    puts({ "status" => "ok" }.to_json)
+  end
+  def watch
+    token = get_token
+    Net::HTTP.start("live.nicovideo.jp", 80) {|w|
+      request = "/api/watchingreservation"
+      response = w.post(request, "accept=true&mode=use&vid=#{@video_id}&token=#{token}", 'Cookie' => @session)
+      #pp response.code
+      #pp response.body
     }
     puts({ "status" => "ok" }.to_json)
   end
   def delete
+    token = get_token
     Net::HTTP.start("live.nicovideo.jp", 80) {|w|
-      request = "/my?delete=timeshift&vid=#{@video_id}&confirm=#{get_token}"
+      request = "/my?delete=timeshift&vid=#{@video_id}&confirm=#{token}"
       response = w.get(request, 'Cookie' => @session)
+      #pp response.code
+      #pp response.body
     }
     puts({ "status" => "ok" }.to_json)
   end
@@ -58,6 +74,9 @@ class WatchingReservation
     if @mode == "register"
       @video_id = ARGV.shift.gsub(/^lv/, '')
       register
+    elsif @mode == "watch"
+      @video_id = ARGV.shift.gsub(/^lv/, '')
+      watch
     elsif @mode == "delete"
       @video_id = ARGV.shift.gsub(/^lv/, '')
       delete

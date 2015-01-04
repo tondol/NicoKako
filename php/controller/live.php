@@ -4,7 +4,7 @@ require_once 'lives.php';
 require_once 'videos.php';
 
 class Controller_live extends Controller {
-	function get_title($chain=null) {	
+	function get_title($chain=null) {
 		return $this->live["title"];
 	}
 	function get_url($chain=null) {

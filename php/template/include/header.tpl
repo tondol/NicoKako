@@ -24,6 +24,7 @@
 				<ul class="nav navbar-nav">
 					<li><a href="<?= h($this->config["application_url"]) ?>">index</a></li>
 					<li><a href="<?= h($this->get_url("register")) ?>">register</a></li>
+					<li><a href="<?= h($this->get_url("timeshift")) ?>">timeshift</a></li>
 					<li><a href="<?= h($this->get_url("logs")) ?>">logs</a></li>
 					<li><a href="<?= h($this->get_url("help")) ?>">help</a></li>
 				</ul>
