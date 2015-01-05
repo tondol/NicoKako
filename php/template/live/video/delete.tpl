@@ -9,16 +9,10 @@
 	$is_valid = $this->get("is_valid");
 	$is_success = $this->get("is_success");
 
-	if (isset($this->post["confirm"])) {
-		if ($is_valid) {
-			$this->include_template("live/video/delete_confirm.tpl");
-		} else {
-			$this->include_template("live/video/delete_default.tpl");
-		}
-	} else if (isset($this->post["submit"])) {
+	if (isset($this->post["submit"])) {
 		$this->include_template("live/video/delete_submit.tpl");
 	} else {
-		$this->include_template("live/video/delete_default.tpl");
+		$this->include_template("live/video/delete_confirm.tpl");
 	}
 ?>
 

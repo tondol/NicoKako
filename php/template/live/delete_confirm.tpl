@@ -14,5 +14,4 @@
 		</div>
 	</fieldset>
 	<button name="submit" type="submit" class="btn btn-danger">放送を本当に削除する</button>
-	<button name="default" type="submit" class="btn btn-default">戻る</button>
 </form>

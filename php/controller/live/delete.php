@@ -73,10 +73,7 @@ class Controller_live_delete extends Controller {
 		return $this->is_success;
 	}
 	function run() {
-		if (isset($this->post["confirm"])) {
-			$this->validate();
-			$this->set("live", $this->live);
-		} else if (isset($this->post["submit"])) {
+		if (isset($this->post["submit"])) {
 			$this->validate();
 			$this->set("live", $this->live);
 
