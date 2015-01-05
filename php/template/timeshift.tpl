@@ -20,6 +20,7 @@
 				case "LIMIT_DATE_OUT":
 				case "USE_LIMIT_DATE_OUT": $status = "視聴期間終了"; break;
 				case "PRODUCT_ARCHIVE_TIMEOUT": $status = "アーカイブ公開期間終了"; break;
+				case "RESERVED": $status = "予約中"; break;
 				default: $status = $item["status"]; break;
 			}
 		?>
