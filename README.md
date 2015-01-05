@@ -33,7 +33,7 @@ $ git submodule update --init
 ### config.ymlの編集
 
 ~~~~
-$ cp config.yml.sample config.yml
+$ cp config.yml.example config.yml
 $ vim config.yml
 ~~~~
 
