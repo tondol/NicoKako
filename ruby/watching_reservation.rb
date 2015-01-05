@@ -9,8 +9,7 @@ require_relative 'base'
 
 class WatchingReservation
   def initialize
-    Model::connect
-    @config = Model::config
+    @config = Model::load_config
   end
   def get_token
     Net::HTTP.start("live.nicovideo.jp", 80) {|w|
@@ -67,8 +66,9 @@ class WatchingReservation
   end
   def main
     # logs.d("downloader", ">> run: #{Time.now}")
-    @nicovideo = Nicovideo.login(@config["nv"]["mail"], @config["nv"]["password"])
+    @nicovideo = Nicovideo.login(@config["nv"]["mail"], @config["nv"]["password"], @config["nv"]["session"])
     @session = @nicovideo.instance_variable_get(:@session)
+    @config["nv"]["session"] = @session
     @mode = ARGV.shift
 
     if @mode == "register"
@@ -83,7 +83,8 @@ class WatchingReservation
     else
       list
     end
-    Model::close
+
+    Model::save_config(@config)
   end
 end
 

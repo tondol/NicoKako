@@ -9,6 +9,7 @@ require_relative 'NicoVideo/nico'
 
 module Model
   def self.connect
+    config = load_config
     @@db = Mysql::new(config["db"]["host"],
       config["db"]["user"],
       config["db"]["password"],
@@ -17,9 +18,13 @@ module Model
   def self.close
     @@db.close
   end
-  def self.config
+  def self.load_config
     config_dir = File.dirname(File.dirname(__FILE__))
     YAML.load_file(config_dir + '/config.yml')
+  end
+  def self.save_config(config)
+    config_dir = File.dirname(File.dirname(__FILE__))
+    File.write(config_dir + '/config.yml', config.to_yaml)
   end
   def self.db
     @@db

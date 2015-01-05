@@ -8,16 +8,18 @@ require_relative 'base'
 
 class GetPlayerStatus
   def initialize
-    Model::connect
-    @config = Model::config
+    @config = Model::load_config
   end
   def main
     # logs.d("downloader", ">> run: #{Time.now}")
-    @nicovideo = Nicovideo.login(@config["nv"]["mail"], @config["nv"]["password"])
+    @nicovideo = Nicovideo.login(@config["nv"]["mail"], @config["nv"]["password"], @config["nv"]["session"])
     @session = @nicovideo.instance_variable_get(:@session)
+    @config["nv"]["session"] = @session
+
     @player_status = Nicovideo::PlayerStatus.new(@session, ARGV.shift)
     puts @player_status.params.to_json
-    Model::close
+
+    Model::save_config(@config)
   end
 end
 
