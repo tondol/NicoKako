@@ -23,5 +23,11 @@
 		</p>
 <?php endif ?>
 	</div>
+	<div class="checkbox" style="margin-top: -5px">
+		<label>
+			<input name="timeshift" type="checkbox" <?= isset($this->post["timeshift"]) && !empty($this->post["timeshift"]) ? 'checked="checked"' : '' ?> value="checked" />
+			タイムシフト予約する
+		</label>
+	</div>
 	<button name="confirm" type="submit" class="btn btn-primary">確認する</button>
 </form>

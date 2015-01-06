@@ -15,17 +15,17 @@
 <p>次の3ステップで利用が可能です。</p>
 
 <ol>
-	<li>放送を登録する<ul>
-		<li><a href="<?= h($this->get_url('register')) ?>">register</a>から放送を登録します。</li>
-		<li>登録に必要なものは、放送のURLだけです。</li>
+	<li>タイトルを登録する<ul>
+		<li><a href="<?= h($this->get_url("downloader/register")) ?>">downloader/register</a>からタイトルを登録します。</li>
+		<li>登録に必要なものは、対象となる生放送のURLだけです。</li>
 		<li>登録前にタイムシフト予約をする必要があります。</li>
 	</ul></li>
 	<li>ダウンロードを待つ<ul>
-		<li>NicoKakoが自動的に放送情報を取得し、ダウンロードを開始します。</li>
+		<li>NicoKakoが自動的にタイトル情報を取得し、ダウンロードを開始します。</li>
 		<li>完了までに時間が掛かるので、しばらく待ちます。</li>
 	</ul></li>
-	<li>放送を閲覧する<ul>
-		<li><a href="<?= h($this->config["application_url"]) ?>">index</a>からダウンロードが完了した放送を閲覧できます。</li>
+	<li>タイトルを閲覧する<ul>
+		<li><a href="<?= h($this->get_url("index")) ?>">index</a>からダウンロードが完了したタイトルを閲覧できます。</li>
 		<li>サムネイルが「NOW DOWNLOADING」になっているものは、現在処理中です。</li>
 	</ul></li>
 </ol>
@@ -37,7 +37,7 @@
 </div>
 
 <ol>
-	<li><a href="<?= h($this->config["application_url"]) ?>">index</a>にアクセスする<ul>
+	<li><a href="<?= h($this->get_url("index")) ?>">index</a>にアクセスする<ul>
 		<li>画面下部に利用可能な放送のリストが表示されます。</li>
 	</ul></li>
 	<li>「lives」の中から好きな放送のサムネイルをクリックする<ul>
@@ -49,13 +49,14 @@
 	</ul></li>
 </ol>
 
-<div id="register" class="page-header">
-	<h2>register <small>放送を登録する</small></h2>
+<div id="downloader" class="page-header">
+	<h2>downloader <small>タイトルを登録する</small></h2>
 </div>
 
 <ol>
-	<li><a href="<?= h($this->get_url("register")) ?>">register</a>にアクセスする<ul>
+	<li><a href="<?= h($this->get_url("downloader/register")) ?>">downloader/register</a>にアクセスする<ul>
 		<li>URLの入力欄が表示されます。</li>
+		<li>タイムシフト予約を自動で行うには「タイムシフト予約する」をチェックします。</li>
 	</ul></li>
 	<li>入力欄に登録したい放送のURLを入力して「確認する」をクリックする<ul>
 		<li>URLが正しければ、放送のタイトルなどが抽出され、画面に表示されます。</li>

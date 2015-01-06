@@ -2,7 +2,7 @@
 <?php $this->include_template('include/breadcrumb.tpl') ?>
 
 <div class="page-header">
-	<h1><?= h($this->get_title()) ?> <small>放送の削除</small></h1>
+	<h1><?= h($this->get_title()) ?> <small>タイトルの削除</small></h1>
 </div>
 
 <?php

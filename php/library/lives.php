@@ -34,6 +34,15 @@ class Model_lives {
 		$statement->execute();
 		return $statement->fetchAll(PDO::FETCH_ASSOC);
 	}
+	function select_all_not_downloaded() {
+		// ダウンロード対象の動画を取得する
+		$sql = "SELECT * FROM `lives`" .
+			" WHERE `downloadedAt` IS NULL AND `deletedAt` IS NULL" .
+			" ORDER BY `createdAt` ASC";
+		$statement = $this->db->prepare($sql);
+		$statement->execute();
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
+	}
 	function insert_into($live_id, $title) {
 		$sql = "INSERT INTO `lives`" .
 			" (`nicoLiveId`, `title`, `createdAt`)" .

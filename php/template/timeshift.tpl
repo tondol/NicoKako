@@ -12,8 +12,6 @@
 	<?php foreach ($this->get("items") as $i => $item): ?>
 <div class="panel panel-default">
 		<?php
-			$watch_url = $this->get_url("timeshift/watch") . "?id=" . $item["vid"];
-			$delete_url = $this->get_url("timeshift/delete") . "?id=" . $item["vid"];
 			switch ($item["status"]) {
 				case "WATCH": $status = "視聴可能（アーカイブ可能）"; break;
 				case "FIRST_WATCH": $status = "未視聴"; break;
@@ -23,21 +21,29 @@
 				case "RESERVED": $status = "予約中"; break;
 				default: $status = $item["status"]; break;
 			}
+			$live_url = "http://live.nicovideo.jp/gate/lv" . $item["vid"];
+			$watch_url = $this->get_url("timeshift/watch") . "?id=" . $item["vid"];
+			$delete_url = $this->get_url("timeshift/delete") . "?id=" . $item["vid"];
 		?>
 	<div class="panel-heading">
-		<a href="http://live.nicovideo.jp/gate/lv<?= h($item["vid"]) ?>"><?= h($item["title"]) ?></a>
+		<a href="<?= h($live_url) ?>"><?= h($item["title"]) ?></a>
 	</div>
 	<div class="panel-body">
 		<span class="pull-left">
 			<?= h($status) ?>
-			<?php if ($item["status"] == "FIRST_WATCH"): ?>
-				/ 視聴期限 <?= h(date("Y-m-d H:i:s", $item["expire"])) ?>
-			<?php endif ?>
+		<?php if ($item["status"] == "FIRST_WATCH"): ?>
+			/ 視聴期限 <?= h(date("Y-m-d H:i:s", $item["expire"])) ?>
+		<?php endif ?>
 		</span>
 		<span class="pull-right">
-			<?php if ($item["unwatch"]): ?>
-				<a href="<?= h($watch_url) ?>" class="btn btn-info">アクティベート</a>
-			<?php endif ?>
+		<?php if ($item["status"] == "WATCH"): ?>
+			<form action="<?= h($this->get_url("downloader/register")) ?>" method="post" style="display: inline">
+				<input type="hidden" name="url" value="<?= h($live_url) ?>" />
+				<button type="submit" class="btn btn-primary">アーカイブ</button>
+			</form>
+		<?php elseif ($item["status"] == "FIRST_WATCH"): ?>
+			<a href="<?= h($watch_url) ?>" class="btn btn-primary">アクティベート</a>
+		<?php endif ?>
 			<a href="<?= h($delete_url) ?>" class="btn btn-danger">削除</a>
 		</span>
 	</div>
@@ -52,10 +58,7 @@
 </div>
 
 <p>
-<?php
-	$register_url = $this->get_url("timeshift/register");
-?>
-	<a href="<?= h($register_url) ?>" class="btn btn-primary">
+	<a href="<?= h($this->get_url("timeshift/register")) ?>" class="btn btn-primary">
 		タイムシフト予約する
 	</a>
 </p>

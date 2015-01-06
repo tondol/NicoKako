@@ -29,5 +29,5 @@
 <?php endif ?>
 
 <p>
-	<a class="btn btn-primary" href="<?= h($this->config["application_url"]) ?>">戻る</a>
+	<a class="btn btn-primary" href="<?= h($this->get_url("downloader")) ?>">戻る</a>
 </p>

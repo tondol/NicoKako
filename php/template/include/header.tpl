@@ -18,12 +18,12 @@
 	<div class="navbar navbar-inverse navbar-static-top">
 		<div class="container">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="<?= h($this->config["application_url"]) ?>">NicoKako</a>
+				<a class="navbar-brand" href="<?= h($this->get_url("index")) ?>">NicoKako</a>
 			</div><!-- /navbar-header -->
 			<div class="navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="<?= h($this->config["application_url"]) ?>">index</a></li>
-					<li><a href="<?= h($this->get_url("register")) ?>">register</a></li>
+					<li><a href="<?= h($this->get_url("index")) ?>">index</a></li>
+					<li><a href="<?= h($this->get_url("downloader")) ?>">downloader</a></li>
 					<li><a href="<?= h($this->get_url("timeshift")) ?>">timeshift</a></li>
 					<li><a href="<?= h($this->get_url("logs")) ?>">logs</a></li>
 					<li><a href="<?= h($this->get_url("help")) ?>">help</a></li>

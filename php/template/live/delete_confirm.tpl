@@ -13,5 +13,5 @@
 			<input type="text" value="<?= h($live['title']) ?>" class="form-control" />
 		</div>
 	</fieldset>
-	<button name="submit" type="submit" class="btn btn-danger">放送を本当に削除する</button>
+	<button name="submit" type="submit" class="btn btn-danger">タイトルを本当に削除する</button>
 </form>

@@ -132,6 +132,7 @@ module Nicovideo
     def initialize(session, live_id)
       @session = session
       @live_id = live_id
+      @config = Model::load_config
     end
     def stream_id(document)
       stream_id = nil
@@ -141,7 +142,7 @@ module Nicovideo
         streams = que.text.split[1].split(',')
         streams.each {|stream|
           fields = stream.split(':')
-          if fields.size == 3 && fields[0] == Model::config["nv"]["quality"]
+          if fields.size == 3 && fields[0] == @config["nv"]["quality"]
             return fields[2]
           else
             stream_id = fields.last
