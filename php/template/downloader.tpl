@@ -11,11 +11,10 @@
 <?php if (count($this->get("lives"))): ?>
 	<?php foreach ($this->get("lives") as $i => $live): ?>
 <div class="panel panel-default">
-		<?php
-			$live_url = "http://live.nicovideo.jp/gate/" . $live["nicoLiveId"];
-		?>
 	<div class="panel-heading">
-		<a href="<?= h($live_url) ?>"><?= h($live["title"]) ?></a>
+		<a href="<?= h($this->get_url("live")) ?>?id=<?= h($live["id"]) ?>">
+			<?= h($live["title"]) ?>
+		</a>
 	</div>
 	<div class="panel-body">
 		登録日時 <?= h($live["createdAt"]) ?> /
