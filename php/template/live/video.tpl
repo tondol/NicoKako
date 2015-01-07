@@ -56,7 +56,7 @@
 </p>
 
 <div class="page-header">
-	<h2>summary <small>概要</small></h2>
+	<h2>maintenance <small>管理</small></h2>
 </div>
 
 <p>
