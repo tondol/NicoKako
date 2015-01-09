@@ -1,0 +1,25 @@
+# directory index
+DirectoryIndex index.php index.html
+
+# deny
+<Files ~ "^\.(htaccess|htpasswd|config.php)$">
+	deny from all
+</Files>
+
+# mod_rewrite
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(([0-9A-Za-z_-]+/)*[0-9A-Za-z_-]+)$ /$1/ [R=301,L,QSA]
+	RewriteRule ^(([0-9A-Za-z_-]+/)*[0-9A-Za-z_-]+)/$ /?chain=$1 [L,QSA]
+</IfModule>
+
+# php
+<IfModule mod_php5.c>
+	php_flag short_open_tag On
+</IfModule>
+
+# content type
+AddType video/mp4 .mp4
+AddType video/x-flv .flv

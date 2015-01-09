@@ -9,6 +9,7 @@ Requirements
 - Ruby（Version 1.9 もしくはそれ以降）
     - Nokogiri
     - Ruby/MySQL
+    - Bundler
 - PHP（Version 5.3 もしくはそれ以降）
     - DOM
     - JSON
@@ -21,23 +22,6 @@ Install
 ----
 
 いくつかのステップが必要です。
-
-### 必要なファイル郡の設置
-
-~~~~
-$ git clone https://github.com/tondol/NicoKako.git ~/www/nicokako
-$ cd ~/www/nicokako
-$ git submodule update --init
-~~~~
-
-### config.ymlの編集
-
-~~~~
-$ cp config.yml.example config.yml
-$ vim config.yml
-~~~~
-
-MySQLへの接続設定（ホスト名，データベース名，ユーザー名，パスワード），タイムシフトのダウンロードに使用するアカウントの設定（メールアドレス，パスワード）などを編集します。
 
 ### rtmpdumpの導入
 
@@ -52,6 +36,24 @@ $ ./configure
 $ make
 $ sudo make install
 ~~~~
+
+### 必要なファイル郡の設置
+
+~~~~
+$ git clone https://github.com/tondol/NicoKako.git ~/www/nicokako
+$ cd ~/www/nicokako
+$ git submodule update --init
+~~~~
+
+### インストールスクリプトの実行
+
+~~~
+$ ./install.sh
+~~
+
+足りないものがある場合はインストールする旨のメッセージが出力され，終了します。
+必要なコマンド等が揃っていれば，設定入力のプロンプトが表示されるので，各項目を入力してください。
+無事完了すれば，必要なgemのインストールやテーブルの作成等が自動で行われます。
 
 ### httpd.confの編集
 
@@ -77,16 +79,6 @@ $ vim .htaccess
 設定ファイルへのアクセス制限や，ウェブ側UIを動作させるためのmod_rewriteの設定，Content-Typeの追加設定などが記述されています。
 必要に応じて，設定を追加してください（.htaccessを使用せずにhttpd.confに記述することももちろん可能です）。
 **Basic認証などの方法によりアクセス制限の設定を追加すること** を強くお薦めします。
-
-### 必要なテーブルを作成
-
-データベースに必要なテーブルを作成します。
-コマンド例のユーザー名（`fuga`）やデータベース名（`nicokako`）は適宜変更してください。
-
-~~~~
-$ cd ~/www/nicokako
-$ mysql -u fuga -p -default-character-set=utf8 nicokako < INSTALL.sql
-~~~~
 
 ### crontabの設定
 
