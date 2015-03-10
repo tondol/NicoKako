@@ -8,6 +8,7 @@ nv:
 # データベースの設定
 db:
   host: "127.0.0.1"
+  port: 3306
   user: fuga
   password: piyo
   database: nicokako

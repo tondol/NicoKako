@@ -10,7 +10,9 @@ class DB {
 	function get_db() {
 		try {
 			return new PDO(
-				"mysql:dbname=" . $this->config["db"]["database"] . ";host=127.0.0.1",
+				"mysql:host={$this->config["db"]["host"]}" .
+					";port={$this->config["db"]["port"]}" .
+					";dbname={$this->config["db"]["database"]}",
 				$this->config["db"]["user"],
 				$this->config["db"]["password"],
 				array(

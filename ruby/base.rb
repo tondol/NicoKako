@@ -13,7 +13,8 @@ module Model
     @@db = Mysql::new(config["db"]["host"],
       config["db"]["user"],
       config["db"]["password"],
-      config["db"]["database"])
+      config["db"]["database"],
+      config["db"]["port"])
   end
   def self.close
     @@db.close
