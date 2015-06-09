@@ -23,6 +23,8 @@ Install
 
 いくつかのステップが必要です。
 
+（将来的に実行環境をDockerfileとして提供したいと思っています。）
+
 ### rtmpdumpの導入
 
 rtmpeプロトコルの動画をダウンロードするため，下記のようにして[rtmpdump](http://rtmpdump.mplayerhq.hu/)を導入します。
