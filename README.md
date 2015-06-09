@@ -55,20 +55,11 @@ $ ./install.sh
 必要なコマンド等が揃っていれば，設定入力のプロンプトが表示されるので，各項目を入力してください。
 無事完了すれば，必要なgemのインストールやテーブルの作成等が自動で行われます。
 
-### httpd.confの編集
+### apache/nginxの設定
 
 `<設置したパス>/public`をドキュメントルートとして設定します。
-
-~~~~
-# 記述例
-
-<VirtualHost *:80>
-    DocumentRoot /home/fuga/www/nicokako/public
-    ServerName nicokako.tondol.com
-</VirtualHost>
-~~~~
-
-### public/.htaccessの編集
+Pretty URLs対応のため，適宜URLのリダイレクト設定を行う必要があります。
+`.htaccess.example`がapache用のサンプルとして用意されています。
 
 ~~~~
 $ cd ~/www/nicokako/public
@@ -76,8 +67,6 @@ $ cp .htaccess.sample .htaccess
 $ vim .htaccess
 ~~~~
 
-設定ファイルへのアクセス制限や，ウェブ側UIを動作させるためのmod_rewriteの設定，Content-Typeの追加設定などが記述されています。
-必要に応じて，設定を追加してください（.htaccessを使用せずにhttpd.confに記述することももちろん可能です）。
 **Basic認証などの方法によりアクセス制限の設定を追加すること** を強くお薦めします。
 
 ### crontabの設定
@@ -100,10 +89,10 @@ NICOKAKO_DIR=/home/fuga/www/nicokako/ruby
 0 * * * * ruby $NICOKAKO_DIR/downloader.rb >> $NICOKAKO_DIR/nicokako.log 2>> $NICOKAKO_DIR/error.log
 ~~~~
 
-### ApacheプロセスからRubyを実行可能であることを確認
+### 注）apacheのプロセスからRubyスクリプトを実行する
 
 Rubyをユーザーのホームディレクトリ以下にインストールしているようなケース（たとえば，rbenvを公式のチュートリアルに従いインストールしているとき）では，PHP側からのRubyスクリプトの呼び出し部分がうまく動かないことがあります。
-そのようなケースでは，`/etc/sysconfig/httpd`もしくは`/etc/apache2/envvars`を編集し，Apacheプロセス実行時のPATHに適宜ディレクトリを追加してください。
+そのようなケースでは，`/etc/sysconfig/httpd`もしくは`/etc/apache2/envvars`を編集し，apacheプロセス実行時のPATHに適宜ディレクトリを追加してください。
 
 ~~~~
 # 記述例

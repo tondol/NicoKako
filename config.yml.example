@@ -1,22 +1,22 @@
 # ニコニコ動画の設定
 # quality: default or premium
 nv:
-  mail: fuga@hoge.com
-  password: piyo
+  mail: foo@bar.com
+  password: baz
   quality: premium
 
 # データベースの設定
 db:
   host: "127.0.0.1"
   port: 3306
-  user: fuga
-  password: piyo
+  user: foo
+  password: bar
   database: nicokako
 
 # サイトの設定
 application_title: NicoKako
-application_url: http://fuga.hoge.com/
+application_url: http://foo.bar.com/
 
 # ダウンロードしたファイルの保存先（絶対パス）
-contents_dir: /home/fuga/nicokako/public/contents/
-contents_url: http://fuga.hoge.com/contents/
+contents_dir: /home/foo/www/public/contents/
+contents_url: http://foo.bar.com/contents/
