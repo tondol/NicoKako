@@ -90,6 +90,10 @@ module Model
         " WHERE `filename` = ?")
       statement.execute(filename)
     end
+    def select_all
+      statement = @db.prepare("SELECT * FROM `videos`")
+      statement.execute
+    end
     def select_all_by_live_id(live_id)
       statement = @db.prepare("SELECT * FROM `videos`" +
         " WHERE `liveId` = ?" +
