@@ -19,7 +19,8 @@
 
 <div id="player"></div> 
 <script type="text/javascript">
-	jwplayer("player").setup({
+	var player = jwplayer("player");
+	player.setup({
 		file: "<?= h($video_url) ?>",
 		image: "<?= h($thumb_url) ?>",
 		width: 640,

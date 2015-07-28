@@ -7,7 +7,7 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript" src="<?= h($this->get_public("assets/js/bootstrap.min.js")) ?>"></script>
 <?php if ($this->chain == "live/video"): ?>
-	<script src="http://jwpsrv.com/library/Jr71WDfEEeO6GhIxOQfUww.js"></script>
+	<script src="http://content.jwplatform.com/libraries/U3tDw6Na.js"></script>
 <?php endif ?>
 	<title><?= $this->get_title() ?></title>
 </head>
