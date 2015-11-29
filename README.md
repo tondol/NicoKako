@@ -14,8 +14,6 @@ Requirements
     - DOM
     - JSON
     - PDO (MySQL)
-- Apache
-    - mod_rewrite
 - MySQL
 
 Install
@@ -27,7 +25,8 @@ Install
 
 ### rtmpdumpの導入
 
-rtmpeプロトコルの動画をダウンロードするため，下記のようにして[rtmpdump](http://rtmpdump.mplayerhq.hu/)を導入します。
+rtmpeプロトコルの動画をダウンロードするため，
+下記のようにして[rtmpdump](http://rtmpdump.mplayerhq.hu/)を導入します。
 rtmpdumpの実行ファイルはパスの通っている場所に配置する必要があります。
 
 ~~~~
@@ -61,15 +60,12 @@ $ ./install.sh
 
 `<設置したパス>/public`をドキュメントルートとして設定します。
 Pretty URLs対応のため，適宜URLのリダイレクト設定を行う必要があります。
-`.htaccess.example`がapache用のサンプルとして用意されています。
 
-~~~~
-$ cd ~/www/nicokako/public
-$ cp .htaccess.sample .htaccess
-$ vim .htaccess
-~~~~
+```
+your_app/foo/bar -> your_app/index.php?chain=foo/bar
+```
 
-**Basic認証などの方法によりアクセス制限の設定を追加すること** を強くお薦めします。
+**Basic認証などの方法によりアクセス制限の設定を追加すること**を強くお薦めします。
 
 ### crontabの設定
 
@@ -93,8 +89,11 @@ NICOKAKO_DIR=/home/fuga/www/nicokako/ruby
 
 ### 注）apacheのプロセスからRubyスクリプトを実行する
 
-Rubyをユーザーのホームディレクトリ以下にインストールしているようなケース（たとえば，rbenvを公式のチュートリアルに従いインストールしているとき）では，PHP側からのRubyスクリプトの呼び出し部分がうまく動かないことがあります。
-そのようなケースでは，`/etc/sysconfig/httpd`もしくは`/etc/apache2/envvars`を編集し，apacheプロセス実行時のPATHに適宜ディレクトリを追加してください。
+Rubyをユーザーのホームディレクトリ以下にインストールしているようなケース
+（たとえば，rbenvを公式のチュートリアルに従いインストールしているとき）では，
+PHP側からのRubyスクリプトの呼び出し部分がうまく動かないことがあります。
+そのようなケースでは，`/etc/sysconfig/httpd`もしくは`/etc/apache2/envvars`を編集し，
+apacheプロセス実行時のPATHに適宜ディレクトリを追加してください。
 
 ~~~~
 # 記述例
