@@ -61,7 +61,7 @@ class Controller {
 		}
 	}
 	// get url for specified chain (default: this)
-	function get_url($chain=null) {
+	function get_url($chain=null, $params=null) {
 		if (is_null($chain)) {
 			$chain = $this->chain;
 		}
