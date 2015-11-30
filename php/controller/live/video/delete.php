@@ -11,16 +11,24 @@ class Controller_live_video_delete extends Controller {
 	private $validation_error = array();
 	private $submission_error = array();
 
-	function get_url($chain=null) {
+	function get_url($chain=null, $params=null) {
 		if ((is_null($chain) || $chain == $this->chain) && isset($this->video['id'])) {
-			return parent::get_url() . "?id=" . $this->video['id'];
+			$params = array_merge(
+				array('id' => $this->video['id']),
+				is_null($params) ? array() : $params
+			);
 		} else if ($chain == "live" && isset($this->live["id"])) {
-			return parent::get_url($chain) . "?id=" . $this->live["id"];
+			$params = array_merge(
+				array('id' => $this->live['id']),
+				is_null($params) ? array() : $params
+			);
 		} else if ($chain == "live/video" && isset($this->video["id"])) {
-			return parent::get_url($chain) . "?id=" . $this->video["id"];
-		} else {
-			return parent::get_url($chain);
+			$params = array_merge(
+				array('id' => $this->video['id']),
+				is_null($params) ? array() : $params
+			);
 		}
+		return parent::get_url($chain, $params);
 	}
 
 	function get_video() {

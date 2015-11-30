@@ -42,7 +42,7 @@ puts "... done"
 
 puts_header("configure config.yml")
 Dir.chdir(File.dirname(__FILE__))
-contents_dir = File.expand_path(File.dirname(__FILE__)) + "/public/contents/"
+contents_dir = File.expand_path(File.dirname(__FILE__)) + "/public/contents"
 @config = YAML.load_file(File.exist?("config.yml") ? "config.yml" : "config.yml.example")
 prompt("nv/mail", "your email address on niconico")
 prompt("nv/password", "your password on niconico account")

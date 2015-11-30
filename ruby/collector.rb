@@ -36,7 +36,7 @@ class NicovideoCollector
       puts "exist only in directory"
       (fs_filenames - db_filenames).each {|filename|
         puts filename
-        filepath = @config["contents_dir"] + filename
+        filepath = @config["contents_dir"] + "/" + filename
         #File.delete(filepath)
       }
     rescue Exception => e

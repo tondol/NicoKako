@@ -7,12 +7,14 @@ class Controller_live extends Controller {
 	function get_title($chain=null) {
 		return $this->live["title"];
 	}
-	function get_url($chain=null) {
+	function get_url($chain=null, $params=null) {
 		if ((is_null($chain) || $chain == $this->chain) && isset($this->live["id"])) {
-			return parent::get_url() . "?id=" . $this->live["id"];
-		} else {
-			return parent::get_url($chain);
+			$params = array_merge(
+				array('id' => $this->live['id']),
+				is_null($params) ? array() : $params
+			);
 		}
+		return parent::get_url($chain, $params);
 	}
 
 	function run() {

@@ -22,7 +22,7 @@ class NicovideoDownloader
 
     resume = ""
     filename = params[:filename]
-    filepath = @config["contents_dir"] + filename
+    filepath = @config["contents_dir"] + "/" + filename
 
     50.times {|i|
       system("rtmpdump" +
@@ -93,7 +93,7 @@ class NicovideoDownloader
     end
 
     filename = "#{params[:live_id]}.xml"
-    filepath = @config["contents_dir"] + filename
+    filepath = @config["contents_dir"] + "/" + filename
     File.open(filepath, "w") {|f|
       comments.each {|comment| f.puts(comment) }
     }
@@ -109,7 +109,7 @@ class NicovideoDownloader
     }
 
     filename = "#{params[:live_id]}.jpg"
-    filepath = @config["contents_dir"] + filename
+    filepath = @config["contents_dir"] + "/" + filename
     File.open(filepath, "wb") {|f|
       f.write(thumbnail)
     }
