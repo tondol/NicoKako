@@ -34,20 +34,20 @@ class Controller_live_delete extends Controller {
 		$videos = new Model_videos();
 		foreach ($videos->select_all_by_live_id($this->live['id']) as $video) {
 			$filename = $video["filename"];
-			$filepath = $this->config["contents"] . $filename;
+			$filepath = $this->config["contents_dir"] . "/" . $filename;
 			if (file_exists($filepath)) {
 				unlink($filepath);
 			}
 		}
 
-		$filename = $this->live["nicoLiveId"] . ".xml";
-		$filepath = $this->config["contents"] . $filename;
+		$filename = $this->live["nicoLiveId"] . ".jpg";
+		$filepath = $this->config["contents_dir"] . "/" . $filename;
 		if (file_exists($filepath)) {
 			unlink($filepath);
 		}
 
-		$filename = $this->live["nicoLiveId"] . ".jpg";
-		$filepath = $this->config["contents"] . $filename;
+		$filename = $this->live["nicoLiveId"] . ".xml";
+		$filepath = $this->config["contents_dir"] . "/" . $filename;
 		if (file_exists($filepath)) {
 			unlink($filepath);
 		}

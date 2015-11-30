@@ -17,7 +17,7 @@
 	<?php foreach ($this->get("videos") as $i => $video): ?>
 		<?php
 			$video_url = $this->get_url("live/video") . "?id=" . $video["id"];
-			$thumb_url = $this->get_public("contents/" . $live["nicoLiveId"] . ".jpg");
+			$thumb_url = $this->config["contents_dir_url"] . "/" . $live["nicoLiveId"] . ".jpg";
 			$filesize = sprintf("%.2f", $video["filesize"] / 1000000.0);
 		?>
 	<div class="col-sm-4 col-md-3">

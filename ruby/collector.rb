@@ -1,9 +1,6 @@
 #!/usr/local/bin/ruby
 # -*- coding: utf-8 -*-
 
-require 'mysql'
-require 'yaml'
-
 require_relative 'NicoVideo/nico'
 require_relative 'base'
 
@@ -25,7 +22,7 @@ class NicovideoCollector
       fs_filenames = []
       Dir.entries(@config["contents_dir"]).each {|entry|
         next if entry == "." || entry == ".."
-        next if entry.end_with?(".jpg") || entry.end_with?(".xml")
+        next unless entry.end_with?(".mp4") || entry.end_with?(".flv")
         fs_filenames << entry
       }
       puts "exist only in database"

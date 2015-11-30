@@ -33,6 +33,19 @@ class Controller_live_video extends Controller {
 			$this->set("live", $this->live);
 		}
 
+		if (filesize("{$this->config["contents_dir"]}/{$this->video["filename"]}") == 0) {
+			$pathinfo = pathinfo($this->video["filename"]);
+			$json = json_decode(shell_exec(
+				"ACD_CLI_CACHE_PATH={$this->config["acd_cli_cache_path"]} " .
+				"/usr/local/bin/acdcli metadata " .
+				"{$this->config["acd_cli_contents_dir"]}/{$this->video["filename"]} 2>&1"
+			), true);
+			$this->set("video_url", $json["tempLink"] . "?/v." . $pathinfo["extension"]);
+		} else {
+			$video_url = "{$this->config["contents_dir_url"]}/{$this->video["filename"]}";
+			$this->set("video_url", $video_url);
+		}
+
 		$this->render();
 	}
 }

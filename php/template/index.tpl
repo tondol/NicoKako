@@ -15,7 +15,7 @@
 <div class="row">
 	<?php foreach ($this->get("lives") as $live): ?>
 		<?php
-			$thumbnail_url = $this->get_public("contents/" . $live["nicoLiveId"] . ".jpg");
+			$thumbnail_url = $this->config["contents_dir_url"] . "/" . $live["nicoLiveId"] . ".jpg";
 			$live_url = $this->get_url("live") . "?id=" . $live["id"];
 		?>
 	<div class="col-sm-4 col-md-3">

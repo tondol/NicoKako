@@ -41,7 +41,7 @@ class Controller_live_video_delete extends Controller {
 	}
 	function clean_files() {
 		$filename = $this->video["filename"];
-		$filepath = $this->config["contents"] . $filename;
+		$filepath = $this->config["contents_dir"] . "/" . $filename;
 		if (empty($filename)) {
 			return;
 		}

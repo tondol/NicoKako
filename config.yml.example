@@ -20,3 +20,7 @@ application_url: http://foo.bar.com/
 # ダウンロードしたファイルの保存先（絶対パス）
 contents_dir: /home/foo/www/public/contents
 contents_dir_url: http://foo.bar.com/contents
+
+# acdcli
+acd_cli_cache_path: /opt
+acd_cli_contents_dir: /kako.tondol.com
