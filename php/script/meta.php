@@ -48,13 +48,13 @@ class Meta {
 		return $this->channel_id;
 	}
 	function get_channel_rss() {
-		$uri = "http://ch.nicovideo.jp/" .
+		$url = "http://ch.nicovideo.jp/" .
 			$this->get_channel_id() .
 			"/video?rss=2.0";
 		$ns = "http://purl.org/dc/elements/1.1/";
 
 		if (is_null($this->channel_title)) {
-			if ($response = @file_get_contents($uri)) {
+			if ($response = @file_get_contents($url)) {
 				$document = new SimpleXMLElement($response);
 				$this->channel_title =
 					(string)$document->channel->children($ns)->creator;
@@ -62,12 +62,12 @@ class Meta {
 		}
 	}
 	function get_channel_html() {
-		$uri = "http://ch.nicovideo.jp/" .
+		$url = "http://ch.nicovideo.jp/" .
 			$this->get_channel_id();
 
 		if (is_null($this->channel_description) ||
 				is_null($this->channel_keywords)) {
-			if ($response = @file_get_contents($uri)) {
+			if ($response = @file_get_contents($url)) {
 				$document = new DOMDocument();
 				@$document->loadHTML($response);
 				$metas = $document->getelementsByTagName("meta");
@@ -89,12 +89,12 @@ class Meta {
 		return $this->video_id;
 	}
 	function get_video_thumb() {
-		$uri = "http://ext.nicovideo.jp/api/getthumbinfo/" .
+		$url = "http://ext.nicovideo.jp/api/getthumbinfo/" .
 			$this->get_video_id();
 
 		if (is_null($this->video_title) ||
 				is_null($this->video_description)) {
-			if ($response = @file_get_contents($uri)) {
+			if ($response = @file_get_contents($url)) {
 				$document = new SimpleXMLElement($response);
 				$this->video_title =
 					(string)$document->thumb->title;

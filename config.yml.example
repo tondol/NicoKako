@@ -18,5 +18,5 @@ application_title: NicoKako
 application_url: http://foo.bar.com/
 
 # ダウンロードしたファイルの保存先（絶対パス）
-contents_dir: /home/foo/www/public/contents/
-contents_url: http://foo.bar.com/contents/
+contents_dir: /home/foo/www/public/contents
+contents_dir_url: http://foo.bar.com/contents

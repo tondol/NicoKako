@@ -60,16 +60,25 @@ class Controller {
 			return $this->config["chain"][$chain];
 		}
 	}
-	// get urk for specified chain (default: this)
+	// get url for specified chain (default: this)
 	function get_url($chain=null) {
 		if (is_null($chain)) {
 			$chain = $this->chain;
 		}
 		if ($chain == $this->config["application_main"]) {
-			return $this->config["application_url"];
+			$url = $this->config["application_url"];
 		} else {
-			return $this->config["application_url"] . $chain . DIRECTORY_SEPARATOR;
+			$url = $this->config["application_url"] . $chain . DIRECTORY_SEPARATOR;
 		}
+		if (!is_null($params)) {
+			$url .= "?" . http_build_query($params);
+		}
+		return $url;
+	}
+	function get_link($chain=null) {
+		$url = $this->get_url($chain);
+		$name = $this->get_name($chain);
+		return "<a href=\"" . $url . "\">" . $name . "</a>";
 	}
 	// get url for specified path
 	function get_public($path=null) {
@@ -81,6 +90,6 @@ class Controller {
 	}
 	// include template for specified path
 	function include_template($path) {
-		include_once $this->config["template_dir"] . $path;
+		include $this->config["template_dir"] . $path;
 	}
 }

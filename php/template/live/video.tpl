@@ -4,9 +4,9 @@
 <?php
 	$live = $this->get("live");
 	$video = $this->get("video");
-	$video_url = $this->config["contents_url"] . $video["filename"];
-	$thumb_url = $this->config["contents_url"] . $live["nicoLiveId"] . ".jpg";
-	$comments_url = $this->config["contents_url"] . $live["nicoLiveId"] . ".xml";
+	$video_url = $this->config["contents_dir_url"] . $video["filename"];
+	$thumb_url = $this->config["contents_dir_url"] . $live["nicoLiveId"] . ".jpg";
+	$comments_url = $this->config["contents_dir_url"] . $live["nicoLiveId"] . ".xml";
 	$filesize = sprintf("%.2f", $video["filesize"] / 1000000.0);
 ?>
 
