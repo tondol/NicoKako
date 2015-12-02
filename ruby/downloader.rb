@@ -79,6 +79,22 @@ class NicovideoDownloader
 
     [lines, dates]
   end
+  def download_thumbnail(params)
+    thumbnail = nil
+    url = params[:url]
+
+    Net::HTTP.start(url.host, url.port) {|w|
+      request = url.path
+      response = w.get(request, "Cookie" => @session)
+      thumbnail = response.body
+    }
+
+    filename = "#{params[:live_id]}.jpg"
+    filepath = @config["contents_dir"] + "/" + filename
+    File.open(filepath, "wb") {|f|
+      f.write(thumbnail)
+    }
+  end
   def download_comments(params)
     comments = []
     end_time = params[:when]
@@ -96,22 +112,6 @@ class NicovideoDownloader
     filepath = @config["contents_dir"] + "/" + filename
     File.open(filepath, "w") {|f|
       comments.each {|comment| f.puts(comment) }
-    }
-  end
-  def download_thumbnail(params)
-    thumbnail = nil
-    url = params[:url]
-
-    Net::HTTP.start(url.host, url.port) {|w|
-      request = url.path
-      response = w.get(request, "Cookie" => @session)
-      thumbnail = response.body
-    }
-
-    filename = "#{params[:live_id]}.jpg"
-    filepath = @config["contents_dir"] + "/" + filename
-    File.open(filepath, "wb") {|f|
-      f.write(thumbnail)
     }
   end
   def download(live)
@@ -136,6 +136,12 @@ class NicovideoDownloader
         @videos.insert_into(live["id"], content[:vpos], filename, filesize)
       }
 
+      @logs.d("downloader", "download/thumbnail: #{live["title"]}")
+      download_thumbnail({
+        :live_id => live["nicoLiveId"],
+        :url => player_status.thumbnail_url,
+      })
+
       @logs.d("downloader", "download/comments: #{live["title"]}")
       download_comments({
         :live_id => live["nicoLiveId"],
@@ -147,15 +153,9 @@ class NicovideoDownloader
         :user_id => params[:user_id],
       })
 
-      @logs.d("downloader", "download/thumbnail: #{live["title"]}")
-      download_thumbnail({
-        :live_id => live["nicoLiveId"],
-        :url => player_status.thumbnail_url,
-      })
-
       @logs.d("downloader", "download: #{live["title"]}")
       @lives.update_with_success(live["id"])
-      sleep 30
+      sleep 10
     rescue StandardError => e
       @logs.e("downloader", "download/unavailable: #{live["title"]}")
       @logs.e("downloader", "download/unavailable: #{e.message}")
