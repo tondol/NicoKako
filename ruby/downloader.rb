@@ -155,13 +155,18 @@ class NicovideoDownloader
 
       @logs.d("downloader", "download: #{live["title"]}")
       @lives.update_with_success(live["id"])
-      sleep 10
+    rescue Nicovideo::AccessLockedError => e
+      @logs.e("downloader", "download/unavailable: #{live["title"]}")
+      @logs.e("downloader", "download/unavailable: #{e.message}")
+      $stderr.puts(e.backtrace)
+      sleep 59
     rescue StandardError => e
       @logs.e("downloader", "download/unavailable: #{live["title"]}")
       @logs.e("downloader", "download/unavailable: #{e.message}")
       $stderr.puts(e.backtrace)
       @lives.update_with_failure(live["id"])
     end
+    sleep 1
   end
   def main
     # logs.d("downloader", ">> run: #{Time.now}")
