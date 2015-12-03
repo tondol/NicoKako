@@ -30,6 +30,11 @@ class Controller_live_video extends Controller_kako {
 
 		if (filesize("{$this->config["contents_dir"]}/{$this->video["filename"]}") == 0) {
 			$pathinfo = pathinfo($this->video["filename"]);
+			//var_dump(shell_exec(
+			//	"ACD_CLI_CACHE_PATH={$this->config["acd_cli_cache_path"]} " .
+			//	"/usr/local/bin/acdcli metadata " .
+			//	"{$this->config["acd_cli_contents_dir"]}/{$this->video["filename"]} 2>&1"
+			//));
 			$json = json_decode(shell_exec(
 				"ACD_CLI_CACHE_PATH={$this->config["acd_cli_cache_path"]} " .
 				"/usr/local/bin/acdcli metadata " .
