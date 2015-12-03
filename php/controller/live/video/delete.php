@@ -3,8 +3,9 @@
 require_once 'lives.php';
 require_once 'videos.php';
 require_once 'logs.php';
+require_once 'controller_kako.php';
 
-class Controller_live_video_delete extends Controller {
+class Controller_live_video_delete extends Controller_kako {
 	private $db = null;
 	private $is_valid = true;
 	private $is_success = true;
@@ -12,23 +13,11 @@ class Controller_live_video_delete extends Controller {
 	private $submission_error = array();
 
 	function get_url($chain=null, $params=null) {
-		if ((is_null($chain) || $chain == $this->chain) && isset($this->video['id'])) {
-			$params = array_merge(
-				array('id' => $this->video['id']),
-				is_null($params) ? array() : $params
-			);
-		} else if ($chain == "live" && isset($this->live["id"])) {
-			$params = array_merge(
-				array('id' => $this->live['id']),
-				is_null($params) ? array() : $params
-			);
-		} else if ($chain == "live/video" && isset($this->video["id"])) {
-			$params = array_merge(
-				array('id' => $this->video['id']),
-				is_null($params) ? array() : $params
-			);
-		}
-		return parent::get_url($chain, $params);
+		return $this->get_url_helper($chain, $params, array(
+			$this->chain => array('id' => $this->video['id']),
+			'live/video' => array('id' => $this->video['id']),
+			'live' => array('id' => $this->live['id']),
+		));
 	}
 
 	function get_video() {

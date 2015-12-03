@@ -2,24 +2,19 @@
 
 require_once 'lives.php';
 require_once 'videos.php';
+require_once 'controller_kako.php';
 
-class Controller_live_video extends Controller {
-	function get_title($chain=null) {	
-		return $this->live["title"];
+class Controller_live_video extends Controller_kako {
+	function get_title($chain=null) {
+		return $this->get_title_helper($chain, array(
+			$this->chain => $this->video['title'],
+		));
 	}
 	function get_url($chain=null, $params=null) {
-		if ((is_null($chain) || $chain == $this->chain) && isset($this->video["id"])) {
-			$params = array_merge(
-				array('id' => $this->video['id']),
-				is_null($params) ? array() : $params
-			);
-		} else if ($chain == "live" && isset($this->live["id"])) {
-			$params = array_merge(
-				array('id' => $this->live['id']),
-				is_null($params) ? array() : $params
-			);
-		}
-		return parent::get_url($chain, $params);
+		return $this->get_url_helper($chain, $params, array(
+			$this->chain => array('id' => $this->video['id']),
+			'live' => array('id' => $this->live['id']),
+		));
 	}
 
 	function run() {
