@@ -7,7 +7,7 @@ require_once 'controller_kako.php';
 class Controller_live_video extends Controller_kako {
 	function get_title($chain=null) {
 		return $this->get_title_helper($chain, array(
-			$this->chain => $this->video['title'],
+			$this->chain => $this->live['title'],
 		));
 	}
 	function get_url($chain=null, $params=null) {

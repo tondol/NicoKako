@@ -4,7 +4,7 @@ class Controller_kako extends Controller {
         function get_title_helper($chain, $options) {
                 foreach ($options as $k => $v) {
                         if ($k == $chain || (is_null($chain) && $k == $this->chain)) {
-                                return $options[$k];
+                                return $v;
                         }
                 }
                 return parent::get_title($chain);
