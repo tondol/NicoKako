@@ -1,17 +1,17 @@
 <?php
 
-class Controller_timeshift_watch extends Controller {
+require_once 'controller_kako.php';
+
+class Controller_timeshift_watch extends Controller_kako {
 	private $is_valid = true;
 	private $is_success = true;
 	private $validation_error = array();
 	private $submission_error = array();
 
-	function get_url($chain=null) {
-		if ((is_null($chain) || $chain == $this->chain) && isset($this->live_id)) {
-			return parent::get_url() . "?id=" . $this->live_id;
-		} else {
-			return parent::get_url($chain);
-		}
+	function get_url($chain=null, $params=null) {
+		return $this->get_url_helper($chain, $params, array(
+			$this->chain => array('id' => $this->live_id),
+		));
 	}
 
 	function get_live_id() {
