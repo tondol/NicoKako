@@ -16,6 +16,22 @@ class Controller_live_video extends Controller_kako {
 			'live' => array('id' => $this->live['id']),
 		));
 	}
+	function acd_meta() {
+		$json = shell_exec(
+			"ACD_CLI_CACHE_PATH={$this->config["acd_cli_cache_path"]} " .
+			"ACD_CLI_SETTINGS_PATH={$this->config["acd_cli_cache_path"]} " .
+			"/usr/local/bin/acdcli metadata " .
+			"{$this->config["acd_cli_contents_dir"]}/{$this->video["filename"]} 2>&1"
+		);
+		return json_decode($json, true);
+	}
+	function acd_sync() {
+		shell_exec(
+			"ACD_CLI_CACHE_PATH={$this->config["acd_cli_cache_path"]} " .
+			"ACD_CLI_SETTINGS_PATH={$this->config["acd_cli_cache_path"]} " .
+			"/usr/local/bin/acdcli sync"
+		);
+	}
 
 	function run() {
 		$lives = new Model_lives();
@@ -30,16 +46,11 @@ class Controller_live_video extends Controller_kako {
 
 		if (filesize("{$this->config["contents_dir"]}/{$this->video["filename"]}") == 0) {
 			$pathinfo = pathinfo($this->video["filename"]);
-			//var_dump(shell_exec(
-			//	"ACD_CLI_CACHE_PATH={$this->config["acd_cli_cache_path"]} " .
-			//	"/usr/local/bin/acdcli metadata " .
-			//	"{$this->config["acd_cli_contents_dir"]}/{$this->video["filename"]} 2>&1"
-			//));
-			$json = json_decode(shell_exec(
-				"ACD_CLI_CACHE_PATH={$this->config["acd_cli_cache_path"]} " .
-				"/usr/local/bin/acdcli metadata " .
-				"{$this->config["acd_cli_contents_dir"]}/{$this->video["filename"]} 2>&1"
-			), true);
+			$json = $this->acd_meta();
+			if (is_null($json)) {
+				$this->acd_sync();
+			}
+			$json = $this->acd_meta();
 			$this->set("video_url", $json["tempLink"] . "?/v." . $pathinfo["extension"]);
 		} else {
 			$video_url = "{$this->config["contents_dir_url"]}/{$this->video["filename"]}";
