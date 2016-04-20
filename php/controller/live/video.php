@@ -49,8 +49,8 @@ class Controller_live_video extends Controller_kako {
 			$json = $this->acd_meta();
 			if (is_null($json)) {
 				$this->acd_sync();
+				$json = $this->acd_meta();
 			}
-			$json = $this->acd_meta();
 			$this->set("video_url", $json["tempLink"] . "?/v." . $pathinfo["extension"]);
 		} else {
 			$video_url = "{$this->config["contents_dir_url"]}/{$this->video["filename"]}";
