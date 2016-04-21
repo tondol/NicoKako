@@ -81,23 +81,27 @@ module Model
       @db = Model::db
     end
     def select(id)
-      statement = @db.prepare("SELECT * FROM `videos`" +
-        " WHERE `id` = ?")
+      statement = @db.prepare("SELECT `videos`.*, `lives`.`nicoLiveId` FROM `videos`" +
+        " LEFT JOIN `lives` ON `videos`.`liveId` = `lives`.`id`" +
+        " WHERE `videos`.`id` = ?")
       statement.execute(id)
     end
     def select_by_filename(filename)
-      statement = @db.prepare("SELECT * FROM `videos`" +
-        " WHERE `filename` = ?")
+      statement = @db.prepare("SELECT `videos`.*, `lives`.`nicoLiveId` FROM `videos`" +
+        " LEFT JOIN `lives` ON `videos`.`liveId` = `lives`.`id`" +
+        " WHERE `videos`.`filename` = ?")
       statement.execute(filename)
     end
     def select_all
-      statement = @db.prepare("SELECT * FROM `videos`")
+      statement = @db.prepare("SELECT `videos`.*, `lives`.`nicoLiveId` FROM `videos`" +
+        " LEFT JOIN `lives` ON `videos`.`liveId` = `lives`.`id`")
       statement.execute
     end
     def select_all_by_live_id(live_id)
-      statement = @db.prepare("SELECT * FROM `videos`" +
-        " WHERE `liveId` = ?" +
-        " ORDER BY `createdAt` ASC")
+      statement = @db.prepare("SELECT `videos`.*, `lives`.`nicoLiveId` FROM `videos`" +
+        " LEFT JOIN `lives` ON `videos`.`liveId` = `lives`.`id`" +
+        " WHERE `lives`.`id` = ?" +
+        " ORDER BY `videos`.`createdAt` ASC")
       statement.execute(live_id)
     end
     def insert_into(live_id, vpos, filename, filesize)

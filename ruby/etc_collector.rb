@@ -58,16 +58,7 @@ class NicovideoCollector
       puts (s1 - s2).to_a
       puts "only: videos on DB"
       puts (s2 - s1).to_a
-      # STEP2. ビデオとサムネイルの一致原則
-      # ローカルの画像とビデオファイルの集合が一致する
-      s1 = Set.new(get_disk_videos {|e| true }.map {|e| $1 if e =~ /^(lv\d+)/ })
-      s2 = Set.new(get_disk_images.map {|e| File.basename(e, ".*") })
-      puts "-- videos on disk (include dummies) v.s. images"
-      puts "only: videos on disk"
-      puts (s1 - s2).to_a
-      puts "only: images"
-      puts (s2 - s1).to_a
-      # STEP3. ローカルとACDの一致原則
+      # STEP2. ローカルとACDの一致原則
       # ローカルの空のビデオファイルとACD上のビデオファイルの集合が一致する
       s1 = Set.new(get_disk_videos {|e| File.size(e) == 0 })
       s2 = Set.new(get_acd_filenames)
