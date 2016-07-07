@@ -44,6 +44,7 @@ class Controller_live_video extends Controller_kako {
 			$this->set("live", $this->live);
 		}
 
+		# Amazon Cloud Driveにバックアップ済みならTempLinkを取得する
 		if (filesize("{$this->config["contents_dir"]}/{$this->video["filename"]}") == 0) {
 			$pathinfo = pathinfo($this->video["filename"]);
 			$json = $this->acd_meta();
@@ -51,10 +52,13 @@ class Controller_live_video extends Controller_kako {
 				$this->acd_sync();
 				$json = $this->acd_meta();
 			}
-			$this->set("video_url", $json["tempLink"] . "?/v." . $pathinfo["extension"]);
+			$this->set("video_url", $json["tempLink"]);
+			$this->set("video_type", $pathinfo["extension"]);
 		} else {
+			$pathinfo = pathinfo($this->video["filename"]);
 			$video_url = "{$this->config["contents_dir_url"]}/{$this->video["filename"]}";
 			$this->set("video_url", $video_url);
+			$this->set("video_type", $pathinfo["extension"]);
 		}
 
 		$this->render();

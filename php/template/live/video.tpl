@@ -5,6 +5,7 @@
 	$live = $this->get("live");
 	$video = $this->get("video");
 	$video_url = $this->get("video_url");
+	$video_type = $this->get("video_type");
 	$thumb_url = $this->config["contents_dir_url"] . "/" . $live["nicoLiveId"] . ".jpg";
 	$comments_url = $this->config["contents_dir_url"] . "/" . $live["nicoLiveId"] . ".xml";
 	$filesize = sprintf("%.2f", $video["filesize"] / 1000000.0);
@@ -23,6 +24,7 @@
 	player.setup({
 		file: "<?= h($video_url) ?>",
 		image: "<?= h($thumb_url) ?>",
+		type: "<?= h($video_type) ?>",
 		width: 640,
 		height: 360
 	});
