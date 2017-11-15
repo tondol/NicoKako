@@ -24,7 +24,7 @@ var dp = new DPlayer({
     container: document.getElementById('player'),
     screenshot: true,
     video: {
-        url: "<?= h($video_url) ?>",
+        url: "<?= h($video_url) ?>?v.<?= h($video_type) ?>",
         pic: "<?= h($thumb_url) ?>"
     }
 });
