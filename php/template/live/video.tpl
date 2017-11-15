@@ -18,16 +18,16 @@
 	<h2>player <small>再生</small></h2>
 </div>
 
-<div id="player"></div> 
+<div id="player"></div>
 <script type="text/javascript">
-	var player = jwplayer("player");
-	player.setup({
-		file: "<?= h($video_url) ?>",
-		image: "<?= h($thumb_url) ?>",
-		type: "<?= h($video_type) ?>",
-		width: 640,
-		height: 360
-	});
+var dp = new DPlayer({
+    container: document.getElementById('player'),
+    screenshot: true,
+    video: {
+        url: "<?= h($video_url) ?>",
+        pic: "<?= h($thumb_url) ?>"
+    }
+});
 </script>
 
 <div class="page-header">

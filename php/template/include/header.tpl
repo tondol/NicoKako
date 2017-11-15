@@ -7,7 +7,9 @@
 	<script type="text/javascript" src="//code.jquery.com/jquery-1.10.2.min.js"></script>
 	<script type="text/javascript" src="<?= h($this->get_public("assets/js/bootstrap.min.js")) ?>"></script>
 <?php if ($this->chain == "live/video"): ?>
-	<script src="//content.jwplatform.com/libraries/U3tDw6Na.js"></script>
+	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/dplayer/1.16.0/DPlayer.min.css" />
+	<script src="//cdnjs.cloudflare.com/ajax/libs/flv.js/1.3.3/flv.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/dplayer/1.16.0/DPlayer.min.js"></script>
 <?php endif ?>
 	<title><?= $this->get_title() ?></title>
 </head>
